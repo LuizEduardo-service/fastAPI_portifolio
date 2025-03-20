@@ -10,9 +10,13 @@ app.mount('/static',StaticFiles(directory='static'), name='static')
 templates = Jinja2Templates(directory='templates')
 
 
-@app.get('/')
+@app.get('/', name='index')
 async def ixdex(request: Request):
     return templates.TemplateResponse('home/index.html',context={"request": request})
+
+@app.get('/about', name='about')
+async def about(request: Request):
+    return templates.TemplateResponse('about/about.html', context={"request": request})
 
 if __name__ == '__main__':
     import uvicorn
