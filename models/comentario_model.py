@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 import sqlalchemy.orm as orm
 from controllers.core.base import Base
 
+
+from sqlalchemy.orm import Mapped, mapped_column
 from models.post_model import PostModel
 
 from datetime import datetime
@@ -9,11 +11,9 @@ from datetime import datetime
 class ComentarioModel(Base):
     __tablename__: str = 'comentarios'
 
-    id: int = Column(Integer, autoincrement=True, primary_key=True)
-    data: datetime = Column(DateTime, default=datetime.now, index=True)
-
-    id_post: int = Column(Integer, ForeignKey('posts.id'))
-    post: PostModel = orm.relationship('PostModel', lazy='joined')
-
-    autor: str = Column(String(200))
-    texto: str = Column(String(200))
+    id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
+    data: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
+    id_post: Mapped[int] = mapped_column(Integer, ForeignKey('posts.id'))
+    post: Mapped[PostModel] = orm.relationship('PostModel', lazy='joined')
+    autor: Mapped[str] = mapped_column(String(200))
+    texto: Mapped[str] = mapped_column(String(200))

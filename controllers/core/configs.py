@@ -11,7 +11,7 @@ port = config('PORT')
 database = config('DATABASE')
 
 class Settings(BaseSettings):
-    DB_URL: str = f'postgres+asyncpg://{user}:{password}@{servername}:{port}/{database}'
+    DB_URL: str = f'postgresql+asyncpg://{user}:{password}@{servername}:{port}/{database}'
     TEMPLATES: Jinja2Templates = Jinja2Templates(directory='templates')
     MEDIA: Path = Path('media')
     
@@ -19,4 +19,4 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-settings: BaseSettings = Settings()
+settings = Settings()
