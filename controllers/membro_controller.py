@@ -12,7 +12,7 @@ from controllers.base_controller import BaseController
 
 class MembroController(BaseController):
 
-    def __init__(self, request, model):
+    def __init__(self, request):
         super().__init__(request, MemberModel)
 
 
