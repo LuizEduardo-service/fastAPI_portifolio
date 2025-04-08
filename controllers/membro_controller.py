@@ -24,7 +24,7 @@ class MembroController(BaseController):
         imagem: UploadFile = form.get('image')
 
 
-        novo_nome: str = upload_file(imagem=imagem)
+        novo_nome: str = self._upload_file(imagem=imagem)
         membro: MemberModel = MemberModel(nome=nome, funcao=funcao, imagem = novo_nome)
 
         async with get_session() as session:
@@ -47,18 +47,18 @@ class MembroController(BaseController):
                     membro.funcao = funcao
                 
                 if imagem.filename:
-                    novo_nome: str = upload_file(imagem=imagem)
+                    novo_nome: str = self._upload_file(imagem=imagem)
                     membro.imagem = novo_nome
 
-async def upload_file(imagem: UploadFile) -> str:
-    """realiza o upload e retona o novo nome do arquivo"""
+    async def _upload_file(self, imagem: UploadFile) -> str:
+        """realiza o upload e retona o novo nome do arquivo"""
 
-    try:
-        ext: str = imagem.filename.split('.')[-1]
-        novo_nome: str = f'{str(uuid4())}.{ext}'                   
-        async with async_open(f'{settings.MEDIA}/{novo_nome}') as file:
-            await file.write(imagem.read())
+        try:
+            ext: str = imagem.filename.split('.')[-1]
+            novo_nome: str = f'{str(uuid4())}.{ext}'                   
+            async with async_open(f'{settings.MEDIA}/{novo_nome}') as file:
+                await file.write(imagem.read())
 
-        return novo_nome
-    except Exception as e:
-        raise Exception('Erro ao salvar imagem')
+            return novo_nome
+        except Exception as e:
+            raise Exception('Erro ao salvar imagem')

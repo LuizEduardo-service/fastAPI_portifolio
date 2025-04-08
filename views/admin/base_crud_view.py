@@ -16,7 +16,7 @@ class BaseCrudView:
         raise NotImplementedError("Metodo não implentado")
     
     async def edit_object(self) -> Response:
-        """rota paara edicao de template"""
+        """rota para edicao de template"""
         raise NotImplementedError("Metodo não implentado")
 
     async def object_list(self, object_controller: BaseController) -> Response:
@@ -50,7 +50,7 @@ class BaseCrudView:
         context = {"request": object_controller.request, "ano": datetime.now().year, "objeto": obj}
 
         if 'details' in str(object_controller.request.url):
-            return settings.TEMPLATES.TemplateResponse(f'admin/{self.template_base}/datail.html', context=context)
+            return settings.TEMPLATES.TemplateResponse(f'admin/{self.template_base}/details.html', context=context)
         
         if 'edit' in str(object_controller.request.url):
             return settings.TEMPLATES.TemplateResponse(f'admin/{self.template_base}/edit.html', context=context)

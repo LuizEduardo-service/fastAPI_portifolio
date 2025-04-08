@@ -61,3 +61,42 @@ class MembroAdmin(BaseCrudView):
                 return settings.TEMPLATES.TemplateResponse('admin/membro/create.html', context=context)
             
             return RedirectResponse(request.url_for("membro_list"), status_code=status.HTTP_201_CREATED)
+        
+    async def edit_object(self, request: Request):
+        membro_controller: MembroController = MembroController(request)
+        membro_id = request.path_params['membro_id']
+
+        if request.method == 'GET':
+            return await super().detail_object(object_controller=membro_controller, obj_id= membro_id )
+        
+        if request.method == 'POST':
+            membro = await membro_controller.get_one_crud(id_obj=membro_id)
+
+            if not membro:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+            form = await request.form()
+            dados: set = None
+            try:
+                await membro_controller.put_crud(obj=membro)
+
+            except ValueError as err:
+                nome: str = form.get('nome')
+                funcao: str = form.get('funcao')
+                dados = {"id": membro_id, "nome": nome, "funcao": funcao}
+                context = {
+                    "request": request,
+                    "ano": datetime.now().year,
+                    "error": err,
+                    "objeto": dados
+                }
+
+                return settings.TEMPLATES.TemplateResponse('admin/membro/edit.html', context=context)
+            
+            return RedirectResponse(request.url_for('membro_list'), status_code=status.HTTP_202_ACCEPTED)
+
+
+
+        return await super().edit_object()
+    
+membro_admin = MembroAdmin()

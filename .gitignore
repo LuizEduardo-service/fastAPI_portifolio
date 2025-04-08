@@ -183,7 +183,7 @@ pyrightconfig.json
 
 # Local History for Visual Studio Code
 .history/
-
+17-template-base-admin
 # Built Visual Studio Code Extensions
 *.vsix
 
