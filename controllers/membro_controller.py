@@ -1,30 +1,25 @@
 from fastapi.requests import Request
 from fastapi import UploadFile
 
-from aiofile import async_open
-
-from uuid import uuid4
-
-from controllers.core.configs import settings
 from controllers.core.database import get_session
 from models.member_model import MemberModel
 from controllers.base_controller import BaseController
 
 class MembroController(BaseController):
 
-    def __init__(self, request):
+    def __init__(self, request: Request):
         super().__init__(request, MemberModel)
 
 
     async def post_crud(self) -> None:
-        form = self.request.form()
+        form =  await self.request.form()
 
         nome: str = form.get('nome')
         funcao: str = form.get('funcao')
-        imagem: UploadFile = form.get('image')
+        imagem: UploadFile = form.get('imagem')
 
 
-        novo_nome: str = self._upload_file(imagem=imagem)
+        novo_nome: str = await self._upload_file(imagem=imagem, tipo='membro')
         membro: MemberModel = MemberModel(nome=nome, funcao=funcao, imagem = novo_nome)
 
         async with get_session() as session:
@@ -36,10 +31,10 @@ class MembroController(BaseController):
             membro: MemberModel = await session.get(MemberModel, obj.id)
 
             if membro:
-                form = self.request.form()
+                form = await self.request.form()
                 nome: str = form.get('nome')
                 funcao: str = form.get('funcao')
-                imagem: UploadFile = form.get(imagem)
+                imagem: UploadFile = form.get('imagem')
 
                 if membro.nome and membro.nome != nome:
                     membro.nome = nome
@@ -47,18 +42,9 @@ class MembroController(BaseController):
                     membro.funcao = funcao
                 
                 if imagem.filename:
-                    novo_nome: str = self._upload_file(imagem=imagem)
+                    novo_nome: str = await self._upload_file(imagem=imagem, tipo='membro')
                     membro.imagem = novo_nome
 
-    async def _upload_file(self, imagem: UploadFile) -> str:
-        """realiza o upload e retona o novo nome do arquivo"""
+                await session.commit()
 
-        try:
-            ext: str = imagem.filename.split('.')[-1]
-            novo_nome: str = f'{str(uuid4())}.{ext}'                   
-            async with async_open(f'{settings.MEDIA}/{novo_nome}') as file:
-                await file.write(imagem.read())
 
-            return novo_nome
-        except Exception as e:
-            raise Exception('Erro ao salvar imagem')

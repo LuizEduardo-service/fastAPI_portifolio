@@ -1,4 +1,4 @@
-{% extends "admin/_base.html" %}{% extends "admin/_base.html" %}
+{% extends "admin/_base.html" %}
 
 {% block content %}
 <h1 class="h3 mb-4 text-gray-800">Edição de Membro</h1>
@@ -7,7 +7,7 @@
     {{error}}
 </div>
 {% endif %}
-<form action="{{url_for('membro_edit', membro_id:objeto.id)}}" method="post" autocomplete="off"
+<form action="{{url_for('membro_edit', membro_id=objeto.id)}}" method="post" autocomplete="off"
     enctype="multipart/form-data">
     <div class="mb-3">
         <label for="nome" class="form-label">Nome</label>
@@ -24,7 +24,7 @@
         <input type="file" name="imagem" id="imagem" class="form-file-input">
     </div>
 
-    <button type="button" class="btn btn-primary">salvar</button>
+    <button type="submit" class="btn btn-primary">salvar</button>
     <a href="{{url_for('membro_list')}}" class="btn btn-info">Cancelar</a>
 </form>
 {% endblock content %}

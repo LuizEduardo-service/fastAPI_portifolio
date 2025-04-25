@@ -18,9 +18,9 @@ class MembroAdmin(BaseCrudView):
         self.router = APIRouter()
         self.router.routes.append(Route(path='/membro/list', endpoint=self.object_list, methods=['GET'], name='membro_list'))
         self.router.routes.append(Route(path='/membro/create', endpoint=self.create_object, methods=['GET', 'POST'], name='membro_create'))
-        self.router.routes.append(Route(path='/membro/details/{membro_id: int}', endpoint=self.detail_object, methods=['GET'], name='membro_details'))
-        self.router.routes.append(Route(path='/membro/edit/{membro_id: int}', endpoint=self.edit_object, methods=['GET','POST'], name='membro_edit'))
-        self.router.routes.append(Route(path='/membro/delete/{membro_id: int}', endpoint=self.delete_object, methods=['DELETE'], name='membro_delete'))
+        self.router.routes.append(Route(path='/membro/details/{membro_id:int}', endpoint=self.edit_object, methods=['GET'], name='membro_details'))
+        self.router.routes.append(Route(path='/membro/edit/{membro_id:int}', endpoint=self.edit_object, methods=['GET','POST'], name='membro_edit'))
+        self.router.routes.append(Route(path='/membro/delete/{membro_id:int}', endpoint=self.delete_object, methods=['DELETE',], name='membro_delete'))
         super().__init__('membro')
 
     async def object_list(self, request: Request):
@@ -30,7 +30,7 @@ class MembroAdmin(BaseCrudView):
     async def delete_object(self, request: Request):
         membro_controller: MembroController = MembroController(request)
         membro_id: int = request.path_params['membro_id']
-        return await super().delete_object(object_id=membro_id, object_controller = membro_controller)
+        return await super().object_delete(object_id=membro_id, object_controller = membro_controller)
     
     async def create_object(self,request: Request):
 
@@ -58,9 +58,9 @@ class MembroAdmin(BaseCrudView):
                     "objeto": dados
                 }
 
-                return settings.TEMPLATES.TemplateResponse('admin/membro/create.html', context=context)
+                return settings.TEMPLATES.TemplateResponse('admin/membro/create.html', context=context,status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            return RedirectResponse(request.url_for("membro_list"), status_code=status.HTTP_201_CREATED)
+            return RedirectResponse(request.url_for("membro_list"), status_code=status.HTTP_302_FOUND)
         
     async def edit_object(self, request: Request):
         membro_controller: MembroController = MembroController(request)
@@ -93,7 +93,7 @@ class MembroAdmin(BaseCrudView):
 
                 return settings.TEMPLATES.TemplateResponse('admin/membro/edit.html', context=context)
             
-            return RedirectResponse(request.url_for('membro_list'), status_code=status.HTTP_202_ACCEPTED)
+            return RedirectResponse(request.url_for('membro_list'), status_code=status.HTTP_302_FOUND)
 
 
 

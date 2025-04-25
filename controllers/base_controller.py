@@ -1,8 +1,14 @@
 from typing import Optional, List
+from fastapi import UploadFile
 from fastapi.requests import Request
 from sqlalchemy.future import select
+from controllers.core.configs import settings
+from uuid import uuid4
+from aiofile import async_open
 
 from controllers.core.database import get_session
+
+from models.tag_model import TagModel
 
 
 class BaseController:
@@ -42,4 +48,22 @@ class BaseController:
     async def put_crud(self, obj: object) -> None:
         raise NotImplementedError("Metodo não implementado")
         
-    
+    async def _upload_file(self, imagem: UploadFile, tipo: str) -> str:
+        """realiza o upload e retona o novo nome do arquivo"""
+
+        try:
+            ext: str = imagem.filename.split('.')[-1]
+            novo_nome: str = f'{str(uuid4())}.{ext}'                   
+            async with async_open(f'{settings.MEDIA}/{tipo}/{novo_nome}', "wb") as file:
+                await file.write(imagem.file.read())
+
+            return novo_nome
+        except Exception as e:
+            raise Exception(f'Erro ao salvar imagem: {e}')
+        
+    async def get_tag(id_tag: int):
+        async with get_session() as session:
+            tag: TagModel = await session.get(TagModel, id_tag)
+            return tag
+
+

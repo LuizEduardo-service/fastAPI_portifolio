@@ -27,14 +27,14 @@ class BaseCrudView:
 
         return settings.TEMPLATES.TemplateResponse(f'admin/{self.template_base}/list.html', context=context)
     
-    async def delete_object(self, object_id: int, object_controller: BaseController) -> Response:
+    async def object_delete(self, object_id: int, object_controller: BaseController) -> Response:
         """remove objeto"""
-        obj = await object_controller.get_one_crud(object_id)
+        obj = await object_controller.get_one_crud(id_obj=object_id)
 
         if not obj:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         
-        object_controller.delete_crud(obj.id)
+        object_controller.delete_crud(id_obj=obj.id)
 
         return Response(object_controller.request.url_for(f'{self.template_base}_list'))
     

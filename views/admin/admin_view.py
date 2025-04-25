@@ -3,10 +3,12 @@ from fastapi.requests import Request
 from controllers.core.configs import settings
 from views.admin.membro_admin import membro_admin
 from datetime import datetime
+from views.admin.area_admin import area_admin
 
 
 router = APIRouter(prefix="/admin")
 router.include_router(membro_admin.router, prefix="/admin")
+router.include_router(area_admin.router,prefix='/admin')
 
 
 @router.get('/', name='admin_index')

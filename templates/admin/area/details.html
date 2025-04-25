@@ -1,7 +1,7 @@
 {% extends "admin/_base.html" %}
 
 {% block content %}
-<h1 class="h3 mb-2 text-gray-800">Membro</h1>
+<h1 class="h3 mb-2 text-gray-800">Area</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">ID: {{objeto.id}}</h6>
@@ -11,20 +11,12 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellscpacing="0">
                 <thead>
                     <tr>
-                        <th>nome</th>
-                        <th>Função</th>
-                        <th>Imagem</th>
+                        <th>Area</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{objeto.nome}}</td>
-                        <td>{{objeto.funcao}}</td>
-                        <td>
-                            <a href="{{url_for('media',path='membro/'+objeto.imagem)}}" target="_blank">
-                                <img src="{{url_for('media',path='membro/' + objeto.imagem)}}" width="7%" height="auto">
-                            </a>
-                        </td>
+                        <td>{{objeto.area}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -32,14 +24,14 @@
         <div class="card-footer d-flex align-items-right">
             <div class="row">
                 <div class="col">
-                    <a href="{{url_for('membro_list')}}" class="btn btn-info">Voltar</a>
+                    <a href="{{url_for('area_list')}}" class="btn btn-info">Voltar</a>
                 </div>
                 <div class="col">
-                    <a href="#" data-url="{{url_for('membro_delete', membro_id=objeto.id)}}" data-toggle="modal"
+                    <a href="#" data-url="{{url_for('area_delete', area_id=objeto.id)}}" data-toggle="modal"
                         data-target="#modal-delete" class="btn btn-danger">Deletar</a>
                 </div>
                 <div class="col">
-                    <a href="{{url_for('membro_edit', membro_id=objeto.id)}} " class="btn btn-primary">
+                    <a href="{{url_for('area_edit', area_id=objeto.id)}} " class="btn btn-primary">
                         Editar
                     </a>
                 </div>

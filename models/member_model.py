@@ -18,6 +18,6 @@ class MemberModel(Base):
         if value is None or value == '':
             raise ValueError('Informe uma função valida')
         if 'Python' not in value:
-            raise ValueError('sua função deve envolvert python')
+            raise ValueError('sua função deve Conter Python')
         
         return value

@@ -1,10 +1,10 @@
 {% extends "admin/_base.html" %}
 {% block content %}
-<h1 class="h3 mb-2 text-gray-800">Gerenciar Membros</h1>
+<h1 class="h3 mb-2 text-gray-800">Gerenciar Area</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <div class="ms-3 d-inline-block">
-            <a href="{{url_for('membro_create')}}" class="btn btn-primary">
+            <a href="{{url_for('area_create')}}" class="btn btn-primary">
                 + Cadastrar
             </a>
         </div>
@@ -16,9 +16,8 @@
                     <tr>
                         <th class="w-1"></th>
                         <th>ID</th>
-                        <th>nome</th>
-                        <th>Função</th>
-                        <th>Imagem</th>
+                        <th>Area</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -26,19 +25,19 @@
                     {% for dado in dados %}
                     <tr>
                         <td class="text-center">
-                            <a href="{{url_for('membro_details', membro_id=dado.id)}}" data-toggle="tooltip"
+                            <a href="{{url_for('area_details', area_id=dado.id)}}" data-toggle="tooltip"
                                 data-placement="top" title="Ver">
                                 <span class="me-1 px-x">
                                     <i class="fa fa-eye"></i>
                                 </span>
                             </a>
-                            <a href="{{url_for('membro_edit', membro_id=dado.id)}}" data-toggle="tooltip"
+                            <a href="{{url_for('area_edit', area_id=dado.id)}}" data-toggle="tooltip"
                                 data-placement="top" title="Editar">
                                 <span class="me-1 px-2">
                                     <i class="fa fa-pen-square"></i>
                                 </span>
                             </a>
-                            <a href="#" data-url="{{url_for('membro_delete', membro_id=dado.id)}}"
+                            <a href="#" data-url="{{url_for('area_delete', area_id=dado.id)}}"
                                 data-target="#modal-delete" data-toggle="modal" title="Deletar">
                                 <span class="me-1 px-2">
                                     <i class="fa fa-trash"></i>
@@ -47,15 +46,11 @@
                         </td>
 
                         <td>{{dado.id}}</td>
-                        <td>{{dado.nome}}</td>
-                        <td>{{dado.funcao}}</td>
-                        <td>
-                            <a href="{{url_for('media',path='membro/' + dado.imagem)}}" target="_blank">Ver</a>
-                        </td>
+                        <td>{{dado.area}}</td>
                     </tr>
                     {% endfor %}
                     {% else%}
-                    <td colspan="5">Não existem membros na listagem</td>
+                    <td colspan="5">Não existem areas na listagem</td>
                     {% endif %}
 
                 </tbody>
