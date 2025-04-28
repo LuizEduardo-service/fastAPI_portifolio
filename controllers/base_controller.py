@@ -67,3 +67,8 @@ class BaseController:
             return tag
 
 
+    async def get_tags(self) -> Optional[List[TagModel]]:
+        async with get_session() as session:
+            query = select(TagModel)
+            result = await session.execute(query)
+            tags: Optional[List[TagModel]] = result.scalars().all()
