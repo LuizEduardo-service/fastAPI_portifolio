@@ -36,22 +36,29 @@ class AutorAdmin(BaseCrudView):
         autor_controller: AutorController = AutorController(request)
         autor_id = Request.path_params['autor_id']
 
-        if request.method == 'GET':
-            return await super().detail_object(object_controller=autor_controller,obj_id=autor_id)
-        
-        form = await request.form()
-        dados: set = None
 
-        autor = await  autor_controller.get_one_crud(id_obj=autor_id)
-
+        autor = await autor_controller.get_one_crud(id_obj=autor_id)
         if not autor:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+        if request.method == 'GET' and 'details' in str(autor_controller.request.url):
+            return await super().detail_object(object_controller=autor_controller, obj_id=autor_id)
+        
+        if request.method == 'GET' and 'edit' in str(autor_controller.request.url):
+    
+            tags = await autor_controller.get_tags()
+            context = {'request': autor_controller.request, 'ano': datetime.now().year, 'objeto': autor,'tags': tags}
+            return settings.TEMPLATES.TemplateResponse('admin/autor/edit.html',context=context)
+
+        form = await request.form()
+        dados: set = None
 
         try:
             autor_controller.put_crud(autor)
         except ValueError as err:
             nome = form.get('nome')
-            dados = {'nome': nome}
+            tags: List[list] = form.getlist('tags')
+            dados = {'nome': nome, 'tags': tags}
             context = {
                 'request': request,
                 'ano': datetime.now().year,
@@ -92,3 +99,5 @@ class AutorAdmin(BaseCrudView):
             return settings.TEMPLATES.TemplateResponse('admin/autor/create.html', context=context)
         
         return RedirectResponse(request.url_for('autor_list'), status_code=status.HTTP_302_FOUND)
+    
+autor_admin = AutorAdmin()
