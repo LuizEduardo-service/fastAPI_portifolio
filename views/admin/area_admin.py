@@ -14,7 +14,7 @@ from views.admin.base_crud_view import BaseCrudView
 
 class AreaAdmin(BaseCrudView):
 
-    def __init__(self, ):
+    def __init__(self):
         self.router = APIRouter()
         self.router.routes.append(Route(path='/area/list', endpoint=self.object_list, methods=['GET'], name='area_list'))
         self.router.routes.append(Route(path='/area/create', endpoint=self.create_object, methods=['GET', 'POST'], name='area_create'))
