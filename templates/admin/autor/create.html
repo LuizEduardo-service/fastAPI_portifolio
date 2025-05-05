@@ -1,0 +1,38 @@
+{% extends "admin/_base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Cadastro de Autor</h1>
+{% if error %}
+<div class="alert alert-warning" role="alert">
+    {{error}}
+</div>
+{% endif %}
+<form action="{{url_for('autor_create')}}" method="post" autocomplete="off" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="autor" class="form-label">Nome</label>
+        <input type="text" name="nome" id="nome" class="form-control" value="{% if objeto %} {{objeto.nome}}{%endif%}"
+            required autofocus>
+    </div>
+
+    <div class="mb-3 form-check">
+        <label for="imagem" class="form-label">Imagem (40x40)</label>
+        <input type="file" class="form-file-input" id="imagem" name="imagem" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="tag" class="form-label">Tags</label>
+        {% if tags %}
+        {% for tag in tags %}
+        <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" id="{{tag.id}}" name="tag" value="{{tag.id}}">
+            <label for="tag{{tag.id}}" class="form-check-label">{{tag.tag}}</label>
+        </div>
+        {% endfor %}
+        {% else %}
+        <span class="badge badge-pill badge-warning">Ainda não existem tags cadastradas.</span>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">salvar</button>
+</form>
+{% endblock content %}

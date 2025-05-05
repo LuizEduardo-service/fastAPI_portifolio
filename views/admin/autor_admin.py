@@ -16,11 +16,11 @@ class AutorAdmin(BaseCrudView):
 
     def __init__(self):
         self.router = APIRouter()
-        self.router.routes(Route(path='/autor/list', endpoint=self.object_list,methods=['GET'] ,name='autor_list'))
-        self.router.routes(Route(path='/autor/create', endpoint=self.create_object, methods=['GET', 'POST'], name='autor_create'))
-        self.router.routes(Route(path='/autor/details/{autor_id:int}', endpoint=self.edit_object, methods=['GET'], name='autor_detail'))
-        self.router.routes(Route(path='/autor/edit/{autor_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='autor_edit'))
-        self.router.routes(Route(path='/autor/delete/{autor_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='autor_delete'))
+        self.router.routes.append(Route(path='/autor/list', endpoint=self.object_list,methods=['GET'] ,name='autor_list'))
+        self.router.routes.append(Route(path='/autor/create', endpoint=self.create_object, methods=['GET', 'POST'], name='autor_create'))
+        self.router.routes.append(Route(path='/autor/details/{autor_id:int}', endpoint=self.edit_object, methods=['GET'], name='autor_details'))
+        self.router.routes.append(Route(path='/autor/edit/{autor_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='autor_edit'))
+        self.router.routes.append(Route(path='/autor/delete/{autor_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='autor_delete'))
         super().__init__('autor')
 
     async def object_list(self, request: Request):
@@ -34,7 +34,7 @@ class AutorAdmin(BaseCrudView):
 
     async def edit_object(self, request:Request):
         autor_controller: AutorController = AutorController(request)
-        autor_id = Request.path_params['autor_id']
+        autor_id = request.path_params['autor_id']
 
 
         autor = await autor_controller.get_one_crud(id_obj=autor_id)
@@ -77,8 +77,6 @@ class AutorAdmin(BaseCrudView):
             context = {'request': autor_controller.request, 'ano': datetime.now().year, 'tags': tags}
 
             return settings.TEMPLATES.TemplateResponse(f'admin/autor/create.html', context=context)
-
-    
 
         form = await request.form()
         dados: set = None

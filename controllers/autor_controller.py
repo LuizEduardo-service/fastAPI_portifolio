@@ -18,7 +18,7 @@ class AutorController(BaseController):
         imagem: UploadFile = form.get('imagem')
         tags: List[list] = form.getlist('tag')
 
-        novo_nome = self._upload_file(imagem=imagem, tipo='autor')
+        novo_nome = await self._upload_file(imagem=imagem, tipo='autor')
         autor: AutorModel = AutorModel(nome= nome, imagem = novo_nome)
 
 
@@ -41,7 +41,7 @@ class AutorController(BaseController):
                 imagem: UploadFile = form.get('imagem')
                 tags: List[list] = form.getlist('tag')
 
-                if nome != autor.nome:
+                if nome and nome != autor.nome:
                     autor.nome = nome
 
                 if tags:

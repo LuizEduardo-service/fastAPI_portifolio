@@ -22,7 +22,7 @@ class BaseController:
         async with get_session() as session:
             query = select(self.model)
             result = await session.execute(query)
-            return result.scalars().all()
+            return result.scalars().unique().all()
         
     async def get_one_crud(self, id_obj: int) -> Optional[object]:
         """retorna um objeot com base no id"""

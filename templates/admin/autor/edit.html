@@ -1,0 +1,41 @@
+{% extends "admin/_base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">Edição de Area</h1>
+{% if error %}
+<div class="alert alert-warning" role="alert">
+    {{error}}
+</div>
+{% endif %}
+<form action="{{url_for('autor_edit', autor_id=objeto.id)}}" method="post" autocomplete="off"
+    enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="nome" class="form-label">Autor</label>
+        <input type="text" name="nome" id="nome" class="form-control" value="{% if objeto %} {{objeto.nome}}{%endif%}"
+            required autofocus>
+    </div>
+
+    <div class="mb-3 form-check">
+        <label for="imagem" class="form-label">Imagem</label>
+        <input type="file" name="imagem" id="imagem" class="form-file-imput">
+    </div>
+
+    <div class="mb-3">
+        <label for="funcao" class="form-label">Tags</label>
+        {% if tags %}
+        {% for tag in tags %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="tag" name="tag" value="{{tag.id}}" {% if tag.id in
+                objeto.get_tags_list %} checked {% endif %}>
+            <label class="form-check-label" for="tag">{{tag.tag}}</label>
+        </div>
+        {% endfor %}
+        {% else %}
+        <span class="badge badge-pill badge-warning">Ainda não existem tags cadastradas.</span>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">salvar</button>
+    <a href="{{url_for('autor_list')}}" class="btn btn-info">Cancelar</a>
+</form>
+{% endblock content %}
