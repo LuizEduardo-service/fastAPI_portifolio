@@ -28,6 +28,12 @@ class DuvidaAdmin(BaseCrudView):
         duvida_controller: DuvidaController = DuvidaController(request)
         return await super().object_list(object_controller= duvida_controller)
     
+    async def object_delete(self, request: Request):
+        duvida_controller: DuvidaController = DuvidaController(request)
+        duvida_id = request.path_params['duvida_id']
+
+        return await super().object_delete(object_id=duvida_id, object_controller=duvida_controller)
+
     async def create_object(self, request: Request):
         duvida_controller: DuvidaController = DuvidaController(request)
 
@@ -60,3 +66,39 @@ class DuvidaAdmin(BaseCrudView):
         
         return RedirectResponse(request.url_for('duvida_list'), status_code=status.HTTP_302_FOUND)
 
+    async def edit_object(self, request: Request):
+        duvida_controller: DuvidaController = DuvidaController(request)
+        duvida_id = request.path_params['duvida_id']
+        duvida = duvida_controller.get_one_crud(id_obj=duvida_id)
+
+        if not duvida:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Registro não encontrado.')
+        
+        if request.method == 'GET' and 'details' in str(duvida_controller.request.url):
+            areas = await duvida_controller.get_areas
+            context = {'request': duvida_controller.request, 'ano': datetime.now().year, 'areas': areas}
+            return settings.TEMPLATES.TemplateResponse(f'admin/duvida/edit.html', context=context)
+
+        form = await request.form()
+        dados: set = None
+
+        try:
+            await duvida_controller.put_crud(obj=duvida)
+        except ValueError as err:
+            area_id: int = form.get('area')
+            titulo: str = form.get('titulo')
+            resposta: str = form.get('resposta')
+            dados = {'id': area_id, 'titulo': titulo, 'resposta': resposta}
+            context = {
+                'request': request,
+                'ano':datetime.now().year,
+                'error': err,
+                'objeto': dados
+            }
+
+            return settings.TEMPLATES.TemplateResponse('admin/duvida/edit.html', context=context)
+        
+        return RedirectResponse(request.url_for('duvida_list'),status_code=status.HTTP_302_FOUND)
+
+
+duvida_admin = DuvidaAdmin()
