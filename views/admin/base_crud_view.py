@@ -23,7 +23,7 @@ class BaseCrudView:
         """Listar dados do objeto"""
 
         dados = await object_controller.get_all()
-        context = {"request": object_controller.request, "ano": datetime.now().year,"dados": dados}
+        context = {"request": object_controller.request, "ano": datetime.now().year,"objeto": dados}
 
         return settings.TEMPLATES.TemplateResponse(f'admin/{self.template_base}/list.html', context=context)
     

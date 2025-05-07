@@ -1,10 +1,10 @@
 {% extends "admin/_base.html" %}
 {% block content %}
-<h1 class="h3 mb-2 text-gray-800">Gerenciar Area</h1>
+<h1 class="h3 mb-2 text-gray-800">Gerenciar Duvidas</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <div class="ms-3 d-inline-block">
-            <a href="{{url_for('area_create')}}" class="btn btn-primary">
+            <a href="{{url_for('duvida_create')}}" class="btn btn-primary">
                 + Cadastrar
             </a>
         </div>
@@ -17,27 +17,29 @@
                         <th class="w-1"></th>
                         <th>ID</th>
                         <th>Area</th>
+                        <th>Titulo</th>
+                        <th>Resposta</th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    {% if dados %}
-                    {% for dado in dados %}
+                    {% if objeto %}
+                    {% for dado in objeto %}
                     <tr>
                         <td class="text-center">
-                            <a href="{{url_for('area_details', area_id=dado.id)}}" data-toggle="tooltip"
+                            <a href="{{url_for('duvida_details', duvida_id=dado.id)}}" data-toggle="tooltip"
                                 data-placement="top" title="Ver">
                                 <span class="me-1 px-x">
                                     <i class="fa fa-eye"></i>
                                 </span>
                             </a>
-                            <a href="{{url_for('area_edit', area_id=dado.id)}}" data-toggle="tooltip"
+                            <a href="{{url_for('duvida_edit', duvida_id=dado.id)}}" data-toggle="tooltip"
                                 data-placement="top" title="Editar">
                                 <span class="me-1 px-2">
                                     <i class="fa fa-pen-square"></i>
                                 </span>
                             </a>
-                            <a href="#" data-url="{{url_for('area_delete', area_id=dado.id)}}"
+                            <a href="#" data-url="{{url_for('duvida_delete', duvida_id=dado.id)}}"
                                 data-target="#modal-delete" data-toggle="modal" title="Deletar">
                                 <span class="me-1 px-2">
                                     <i class="fa fa-trash"></i>
@@ -46,11 +48,13 @@
                         </td>
 
                         <td>{{dado.id}}</td>
-                        <td>{{dado.area}}</td>
+                        <td>{{dado.area.area}}</td>
+                        <td>{{dado.titulo}}</td>
+                        <td>{{dado.resposta}}</td>
                     </tr>
                     {% endfor %}
                     {% else%}
-                    <td colspan="5">Não existem areas na listagem</td>
+                    <td colspan="5">Não existem Duvidas na listagem</td>
                     {% endif %}
 
                 </tbody>

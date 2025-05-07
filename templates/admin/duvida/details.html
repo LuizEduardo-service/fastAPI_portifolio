@@ -1,7 +1,7 @@
 {% extends "admin/_base.html" %}
 
 {% block content %}
-<h1 class="h3 mb-2 text-gray-800">Area</h1>
+<h1 class="h3 mb-2 text-gray-800">Duvida</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">ID: {{objeto.id}}</h6>
@@ -12,11 +12,15 @@
                 <thead>
                     <tr>
                         <th>Area</th>
+                        <th>Titulo</th>
+                        <th>Resposta</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{objeto.area}}</td>
+                        <td>{{objeto.area.area}}</td>
+                        <td>{{objeto.titulo}}</td>
+                        <td>{{objeto.resposta}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -24,14 +28,14 @@
         <div class="card-footer d-flex align-items-right">
             <div class="row">
                 <div class="col">
-                    <a href="{{url_for('area_list')}}" class="btn btn-info">Voltar</a>
+                    <a href="{{url_for('duvida_list')}}" class="btn btn-info">Voltar</a>
                 </div>
                 <div class="col">
-                    <a href="#" data-url="{{url_for('area_delete', area_id=objeto.id)}}" data-toggle="modal"
+                    <a href="#" data-url="{{url_for('duvida_delete', duvida_id=objeto.id)}}" data-toggle="modal"
                         data-target="#modal-delete" class="btn btn-danger">Deletar</a>
                 </div>
                 <div class="col">
-                    <a href="{{url_for('area_edit', area_id=objeto.id)}} " class="btn btn-primary">
+                    <a href="{{url_for('duvida_edit', duvida_id=objeto.id)}} " class="btn btn-primary">
                         Editar
                     </a>
                 </div>

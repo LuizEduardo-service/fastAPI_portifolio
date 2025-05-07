@@ -68,15 +68,18 @@ class DuvidaAdmin(BaseCrudView):
 
     async def edit_object(self, request: Request):
         duvida_controller: DuvidaController = DuvidaController(request)
-        duvida_id = request.path_params['duvida_id']
-        duvida = duvida_controller.get_one_crud(id_obj=duvida_id)
+        duvida_id: int = request.path_params['duvida_id']
+        duvida = await duvida_controller.get_one_crud(id_obj=duvida_id)
 
         if not duvida:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Registro não encontrado.')
         
         if request.method == 'GET' and 'details' in str(duvida_controller.request.url):
+            return await super().detail_object(obj_id=duvida_id, object_controller=duvida_controller)
+        
+        if request.method == 'GET' and 'edit' in str(duvida_controller.request.url):
             areas = await duvida_controller.get_areas
-            context = {'request': duvida_controller.request, 'ano': datetime.now().year, 'areas': areas}
+            context = {'request': duvida_controller.request, 'ano': datetime.now().year, 'objeto': duvida, 'areas': areas}
             return settings.TEMPLATES.TemplateResponse(f'admin/duvida/edit.html', context=context)
 
         form = await request.form()

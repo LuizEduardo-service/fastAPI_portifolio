@@ -22,7 +22,7 @@ class DuvidaController(BaseController):
         titulo: str = form.get('titulo')
         resposta: str = form.get('resposta')
 
-        duvida: DuvidaModel = DuvidaModel(id_area=area_id, titulo=titulo, resposta=resposta)
+        duvida: DuvidaModel = DuvidaModel(id_area=int(area_id), titulo=titulo, resposta=resposta)
 
         async with get_session() as session:
             session.add(duvida)
@@ -40,7 +40,7 @@ class DuvidaController(BaseController):
                 resposta: str = form.get('resposta')
 
                 if area_id and int(area_id) != duvida.id_area:
-                    duvida.id_area = area_id
+                    duvida.id_area = int(area_id)
                 if titulo and titulo != duvida.titulo:
                     duvida.titulo = titulo
                 if resposta and resposta != duvida.resposta:
