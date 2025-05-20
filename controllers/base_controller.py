@@ -8,6 +8,7 @@ from aiofile import async_open
 
 from controllers.core.database import get_session
 
+from models.post_model import PostModel
 from models.tag_model import TagModel
 
 
@@ -66,9 +67,16 @@ class BaseController:
             tag: TagModel = await session.get(TagModel, id_tag)
             return tag
 
-
     async def get_tags(self) -> Optional[List[TagModel]]:
         async with get_session() as session:
             query = select(TagModel)
             result = await session.execute(query)
             tags: Optional[List[TagModel]] = result.scalars().all()
+
+    async def get_posts(self) -> Optional[List[PostModel]]:
+        async with get_session() as session:
+            query = select(PostModel)
+            result = await session.execute(query)
+            autores: Optional[List[PostModel]] = result.scalars().unique().all()
+
+        return autores

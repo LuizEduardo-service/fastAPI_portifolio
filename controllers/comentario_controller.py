@@ -49,4 +49,4 @@ class ComentarioController(BaseController):
 
         return await super().put_crud(obj)
 
-        
+    
