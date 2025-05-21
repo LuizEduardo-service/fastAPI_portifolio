@@ -60,7 +60,7 @@ class ComentarioAdmin(BaseCrudView):
             return settings.TEMPLATES.TemplateResponse('admin/comentario/create.html', context=context)
 
 
-        return RedirectResponse(request.url('comentario_list'),status_code=status.HTTP_302_FOUND)
+        return RedirectResponse(request.url_for('comentario_list'),status_code=status.HTTP_302_FOUND)
     
 
     async def edit_object(self, request: Request):
@@ -105,3 +105,6 @@ class ComentarioAdmin(BaseCrudView):
             return settings.TEMPLATES.TemplateResponse('admin/comentario/edit.html', context=context)
         
         return RedirectResponse(request.url_for('comentario_list'), status_code=status.HTTP_302_FOUND)
+
+
+comentario_admin = ComentarioAdmin()

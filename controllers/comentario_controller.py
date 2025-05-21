@@ -17,11 +17,11 @@ class ComentarioController(BaseController):
         autor: str = form.get('autor')
         texto: str = form.get('texto')
 
-        comentario: ComentarioModel = ComentarioModel(id_post= post_id, autor= autor, texto=texto)
+        comentario: ComentarioModel = ComentarioModel(id_post= int(post_id), autor= autor, texto=texto)
 
         async with get_session() as session:
             session.add(comentario)
-            session.commit()
+            await session.commit()
 
     async def put_crud(self, obj: object) -> None:
         async with get_session() as session:
