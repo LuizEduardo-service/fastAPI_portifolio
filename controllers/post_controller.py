@@ -2,8 +2,6 @@ from typing import List
 from fastapi.requests import Request
 from fastapi import UploadFile
 
-from aiofile import async_open
-
 from controllers.core.database import get_session
 from models.post_model import PostModel
 from controllers.base_controller import BaseController
@@ -59,7 +57,7 @@ class PostController(BaseController):
                     tag = await self.get_tag(id_tag = int(id_tag))
                     tag_local = await session.merge(tag)
                     post.tags.append(tag_local)
-                    
+
             if texto and texto != post.texto:
                 post.texto =texto
             if autor_id and autor_id != post.id_autor:
