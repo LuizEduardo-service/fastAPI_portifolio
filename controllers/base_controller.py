@@ -10,6 +10,7 @@ from controllers.core.database import get_session
 
 from models.post_model import PostModel
 from models.tag_model import TagModel
+from models.autor_model import AutorModel
 
 
 class BaseController:
@@ -78,5 +79,13 @@ class BaseController:
             query = select(PostModel)
             result = await session.execute(query)
             autores: Optional[List[PostModel]] = result.scalars().unique().all()
+
+        return autores
+    
+    async def get_autores(self) -> Optional[List[AutorModel]]:
+        async with get_session() as session:
+            query = select(AutorModel)
+            result = await session.execute(query)
+            autores: Optional[List[AutorModel]] = result.scalars().unique().all()
 
         return autores

@@ -38,7 +38,6 @@ class BaseCrudView:
 
         return Response(object_controller.request.url_for(f'{self.template_base}_list'))
     
-
     async def detail_object(self, object_controller: BaseController, obj_id: int) -> Response:
         """Consulta um objeto por id"""
 
