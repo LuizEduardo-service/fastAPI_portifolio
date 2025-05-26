@@ -48,7 +48,7 @@ class PostAdmin(BaseCrudView):
             autores = await post_controller.get_autores()
             tags = await post_controller.get_tags()
 
-            context = {'request': post_controller.request, 'ano': datetime.now().year, 'autores': autores, 'tags': tags}
+            context = {'request': post_controller.request, 'ano': datetime.now().year, 'autores': autores, 'tags': tags, 'objeto': post}
 
             return settings.TEMPLATES.TemplateResponse(f'admin/post/edit.html', context=context)
         
@@ -94,7 +94,7 @@ class PostAdmin(BaseCrudView):
         dados:set = None
 
         try:
-            post_controller.post_crud()
+            await post_controller.post_crud()
         except ValueError as err:
             titulo: str = form.get('titulo')
             tags: List[object] = form.get('tags')
@@ -108,5 +108,7 @@ class PostAdmin(BaseCrudView):
                 "objeto": dados
             }
             return settings.TEMPLATES.TemplateResponse("admin/post/create.html", context=context)
+        return RedirectResponse(request.url_for('post_list'), status_code=status.HTTP_302_FOUND)
 
-        return await super().create_object()
+
+post_admin = PostAdmin()

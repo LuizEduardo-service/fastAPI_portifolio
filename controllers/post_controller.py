@@ -17,12 +17,12 @@ class PostController(BaseController):
         titulo: str = form.get('titulo')
         tags: str = form.getlist('tags')
         imagem: UploadFile = form.get('imagem')
-        autor_id: str = form.get('autor_id')
+        autor_id: str = form.get('autor')
         texto: str = form.get('texto')
 
-        nome_arquivo = self._upload_file(imagem=imagem,tipo='post')
+        nome_arquivo = await self._upload_file(imagem=imagem,tipo='post')
 
-        post: PostModel = PostModel(titulo=titulo, imagem=nome_arquivo,texto=texto,id_autor=autor_id)
+        post: PostModel = PostModel(titulo=titulo, imagem=nome_arquivo,text=texto,id_autor=int(autor_id))
 
         for id_tag in tags:
             tag = await self.get_tag(id_tag=int(id_tag))
@@ -58,8 +58,8 @@ class PostController(BaseController):
                     tag_local = await session.merge(tag)
                     post.tags.append(tag_local)
 
-            if texto and texto != post.texto:
-                post.texto =texto
+            if texto and texto != post.text:
+                post.text =texto
             if autor_id and autor_id != post.id_autor:
                 post.id_autor = autor_id
             if imagem.filename:

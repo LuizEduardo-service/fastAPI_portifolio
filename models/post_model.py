@@ -32,7 +32,7 @@ class PostModel(Base):
     data: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
     tags: Mapped[List[TagModel]] = orm.relationship('TagModel', secondary=tags_post, backref='tagp', lazy='joined')
     imagem: Mapped[str] = mapped_column(String(200))
-    texto: Mapped[str]  = mapped_column(String(200))
+    text: Mapped[str]  = mapped_column(String(200))
     comentarios: Mapped[List[object]] = orm.relationship('ComentarioModel', secondary=comentarios_post, backref='comentario', lazy='joined')
     id_autor: Mapped[int] = mapped_column(Integer, ForeignKey('autores.id'))
     autor: Mapped[AutorModel] = orm.relationship('AutorModel', lazy='joined')
