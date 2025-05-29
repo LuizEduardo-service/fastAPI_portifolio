@@ -23,8 +23,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if dados %}
-                    {% for dado in dados %}
+                    {% if objeto %}
+                    {% for dado in objeto %}
                     <tr>
                         <td class="text-center">
                             <a href="{{url_for('autor_details', autor_id=dado.id)}}" data-toggle="tooltip"

@@ -11,7 +11,7 @@ class TagController(BaseController):
         form = await self.request.form()
         tags: str = form.get('tag')
 
-        tag: TagModel = TagModel(tag=tags)
+        tag: TagModel = TagModel(tags=tags)
         async with get_session() as session:
             session.add(tag)
             await session.commit()

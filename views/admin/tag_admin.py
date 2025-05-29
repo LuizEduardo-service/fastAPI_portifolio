@@ -61,13 +61,13 @@ class TagAdmin(BaseCrudView):
     
     async def edit_object(self, request: Request):
         tag_controller: TagController = TagController(request=request)
-        tag_id: int = await request.path_params['tag_id']
+        tag_id: int = request.path_params['tag_id']
 
         if request.method == 'GET':
             return await super().detail_object(obj_id=tag_id, object_controller=tag_controller)
 
 
-        tag: TagModel = tag_controller.get_one_crud(id_obj=tag_id)
+        tag: TagModel = await tag_controller.get_one_crud(id_obj=tag_id)
 
         if not tag:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
