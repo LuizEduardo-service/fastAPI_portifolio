@@ -27,7 +27,7 @@ class BaseController:
             return result.scalars().unique().all()
         
     async def get_one_crud(self, id_obj: int) -> Optional[object]:
-        """retorna um objeot com base no id"""
+        """retorna um objeto com base no id"""
 
         async with get_session() as session:
             obj = await session.get(self.model, id_obj)

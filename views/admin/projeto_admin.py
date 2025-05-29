@@ -35,27 +35,23 @@ class ProjetoAdmin(BaseCrudView):
     
     async def edit_object(self, request: Request):
         projeto_controller: ProjetoController = ProjetoController(request=request)
-        projeto_id: int = request.path_params['projeto_id']
+        projeto_id: int = int(request.path_params['projeto_id'])
 
-        if request.method == 'GET' and 'details' in str(projeto_controller.request.url):
+        if request.method == 'GET':
             return await super().detail_object(object_controller=projeto_controller, obj_id=projeto_id)
         
-        if request.method == 'GET' and 'edit' in str(projeto_controller.request.url):
-            projeto: ProjetoModel = projeto_controller.get_one_crud(id_obj=projeto_id)
 
-            if not projeto:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        projeto = await projeto_controller.get_one_crud(id_obj=projeto_id)
 
-            context ={'request': projeto_controller.request, 'ano': datetime.now().year, 'objeto': projeto}
-            return settings.TEMPLATES.TemplateResponse('/admin/projeto/edit.html', context=context)
-        
+        if not projeto:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+
         form = await request.form()
         dados:set = None
 
-
-        projeto: ProjetoModel = projeto_controller.get_one_crud(id_obj=projeto_id)
         try:
-            projeto_controller.put_crud(obj=projeto)
+            await projeto_controller.put_crud(obj=projeto)
         except Exception as err:
             dados = {
                 'id':projeto_id,
@@ -84,7 +80,7 @@ class ProjetoAdmin(BaseCrudView):
         form = await request.form()
         dados: set = None
         try:
-            projeto_controller.post_crud()
+            await projeto_controller.post_crud()
         except ValueError as err:
             dados = {
                 'titulo': form.get('titulo'),

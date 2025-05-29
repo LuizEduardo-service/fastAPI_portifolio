@@ -29,7 +29,8 @@ class ProjetoController(BaseController):
                                             descricao_final= descricao_final,
                                             imagem1=novo_imagem1,
                                             imagem2=novo_imagem2,
-                                            imagem3=novo_imagem3
+                                            imagem3=novo_imagem3,
+                                            link='teste'
                                                 )
         
         async with get_session() as session:
@@ -67,8 +68,3 @@ class ProjetoController(BaseController):
 
             await session.commit()
 
-
-        
-
-        
-        return await super().put_crud(obj)
