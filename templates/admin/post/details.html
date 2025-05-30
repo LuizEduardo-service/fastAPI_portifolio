@@ -27,7 +27,7 @@
                         <td title="{{ objeto.texto }}">{{ objeto.texto|truncate(20) }}...</td>
                         <td>
                             {% for tag in objeto.tags %}
-                            <span class="badge badge-primary">{{tag.tag}}</span>
+                            <span class="badge badge-primary">{{tag.tags}}</span>
                             {% endfor %}
                         </td>
                     </tr>

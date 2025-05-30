@@ -63,7 +63,7 @@ class BaseController:
         except Exception as e:
             raise Exception(f'Erro ao salvar imagem: {e}')
         
-    async def get_tag(id_tag: int):
+    async def get_tag(self, id_tag: int):
         async with get_session() as session:
             tag: TagModel = await session.get(TagModel, id_tag)
             return tag
@@ -73,6 +73,8 @@ class BaseController:
             query = select(TagModel)
             result = await session.execute(query)
             tags: Optional[List[TagModel]] = result.scalars().all()
+
+            return tags
 
     async def get_posts(self) -> Optional[List[PostModel]]:
         async with get_session() as session:

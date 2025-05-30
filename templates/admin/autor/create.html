@@ -25,7 +25,7 @@
         {% for tag in tags %}
         <div class="form-check form-check-inline">
             <input type="checkbox" class="form-check-input" id="{{tag.id}}" name="tag" value="{{tag.id}}">
-            <label for="tag{{tag.id}}" class="form-check-label">{{tag.tag}}</label>
+            <label for="tag{{tag.id}}" class="form-check-label">{{tag.tags}}</label>
         </div>
         {% endfor %}
         {% else %}

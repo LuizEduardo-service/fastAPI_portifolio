@@ -27,7 +27,7 @@
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="tag" name="tag" value="{{tag.id}}" {% if tag.id in
                 objeto.get_tags_list %} checked {% endif %}>
-            <label class="form-check-label" for="tag">{{tag.tag}}</label>
+            <label class="form-check-label" for="tag">{{tag.tags}}</label>
         </div>
         {% endfor %}
         {% else %}

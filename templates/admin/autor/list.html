@@ -52,7 +52,7 @@
                         <td><a href="{{ url_for('media', path='autor/' + dado.imagem) }}" target="_blank">ver</a></td>
                         <td>
                             {% for tag in dado.tags %}
-                            <span class="badge badge-pill badge-success">{{ tag.tag }}</span>
+                            <span class="badge badge-pill badge-success">{{ tag.tags }}</span>
                             {% endfor %}
                         </td>
                     </tr>
