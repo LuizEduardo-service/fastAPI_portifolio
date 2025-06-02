@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
 from fastapi.staticfiles import StaticFiles
-from views import home_views
+from views import home_views, error_view
 from views.admin import admin_view
 
 
-app = FastAPI(redoc_url=None, docs_url=None)
+app = FastAPI(redoc_url=None, docs_url=None, exception_handlers=error_view.exception_handlers)
 app.include_router(router=home_views.router)
 app.include_router(router=admin_view.router)
 
