@@ -35,11 +35,11 @@
                     <a href="{{url_for('membro_list')}}" class="btn btn-info">Voltar</a>
                 </div>
                 <div class="col">
-                    <a href="#" data-url="{{url_for('membro_delete', membro_id=objeto.id)}}" data-toggle="modal"
+                    <a href="#" data-url="{{url_for('membro_delete', objeto_id=objeto.id)}}" data-toggle="modal"
                         data-target="#modal-delete" class="btn btn-danger">Deletar</a>
                 </div>
                 <div class="col">
-                    <a href="{{url_for('membro_edit', membro_id=objeto.id)}} " class="btn btn-primary">
+                    <a href="{{url_for('membro_edit', objeto_id=objeto.id)}} " class="btn btn-primary">
                         Editar
                     </a>
                 </div>

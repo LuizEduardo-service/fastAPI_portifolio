@@ -26,19 +26,19 @@
                     {% for dado in objeto %}
                     <tr>
                         <td class="text-center">
-                            <a href="{{ url_for('comentario_details', comentario_id=dado.id) }}" data-toggle="tooltip"
+                            <a href="{{ url_for('comentario_details', objeto_id=dado.id) }}" data-toggle="tooltip"
                                 data-placement="top" title="Ver">
                                 <span class="me-1 px-x">
                                     <i class="fas fa-eye"></i>
                                 </span>
                             </a>
-                            <a href="{{ url_for('comentario_edit', comentario_id=dado.id) }}" data-toggle="tooltip"
+                            <a href="{{ url_for('comentario_edit', objeto_id=dado.id) }}" data-toggle="tooltip"
                                 data-placement="top" title="Editar">
                                 <span class="me-1 px-2">
                                     <i class="fas fa-pen-square"></i>
                                 </span>
                             </a>
-                            <a href="#" data-url="{{ url_for('comentario_delete', comentario_id=dado.id) }}"
+                            <a href="#" data-url="{{ url_for('comentario_delete', objeto_id=dado.id) }}"
                                 data-toggle="modal" data-target="#modal-delete" title="Deletar">
                                 <span class="me-1 px-2">
                                     <i class="fas fa-trash"></i>

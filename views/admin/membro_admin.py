@@ -29,7 +29,7 @@ class MembroAdmin(BaseCrudView):
     
     async def delete_object(self, request: Request):
         membro_controller: MembroController = MembroController(request)
-        membro_id: int = request.path_params['membro_id']
+        membro_id: int = request.path_params['objeto_id']
         return await super().object_delete(object_id=membro_id, object_controller = membro_controller)
     
     async def create_object(self,request: Request):
@@ -64,7 +64,7 @@ class MembroAdmin(BaseCrudView):
         
     async def edit_object(self, request: Request):
         membro_controller: MembroController = MembroController(request)
-        membro_id = request.path_params['membro_id']
+        membro_id = request.path_params['objeto_id']
 
         if request.method == 'GET':
             return await super().detail_object(object_controller=membro_controller, obj_id= membro_id )

@@ -28,7 +28,7 @@ class ComentarioAdmin(BaseCrudView):
     
     async def object_delete(self, request: Request):
         comentario_controller: ComentarioController = ComentarioController(request=request)
-        comentario_id = request.path_params['comentario_id']
+        comentario_id = request.path_params['objeto_id']
         return await super().object_delete(object_id=comentario_id, object_controller=comentario_controller)
     
     async def create_object(self, request: Request):
@@ -66,7 +66,7 @@ class ComentarioAdmin(BaseCrudView):
 
     async def edit_object(self, request: Request):
         comentario_controller: ComentarioController = ComentarioController(request=request)
-        comentario_id: int = request.path_params['comentario_id']
+        comentario_id: int = request.path_params['objeto_id']
 
         if request.method == 'GET' and 'details' in str(comentario_controller.request.url):
             return await super().detail_object(object_controller=comentario_controller, obj_id=comentario_id)

@@ -28,13 +28,13 @@
                     </a>
                 </div>
                 <div class="col">
-                    <a href="#" data-url="{{ url_for('tag_delete', tag_id=objeto.id) }}" data-toggle="modal"
+                    <a href="#" data-url="{{ url_for('tag_delete', objeto_id=objeto.id) }}" data-toggle="modal"
                         data-target="#modal-delete" class="btn btn-danger">
                         Deletar
                     </a>
                 </div>
                 <div class="col">
-                    <a href="{{ url_for('tag_edit', tag_id=objeto.id) }}" class="btn btn-primary">
+                    <a href="{{ url_for('tag_edit', objeto_id=objeto.id) }}" class="btn btn-primary">
                         Editar
                     </a>
                 </div>

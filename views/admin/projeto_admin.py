@@ -29,13 +29,13 @@ class ProjetoAdmin(BaseCrudView):
     
     async def object_delete(self,request: Request):
         projeto_controller: ProjetoController = ProjetoController(request= request)
-        projeto_id: int = request.path_params['projeto_id']
+        projeto_id: int = request.path_params['objeto_id']
 
         return await super().object_delete(object_id=projeto_id, object_controller= projeto_controller)
     
     async def edit_object(self, request: Request):
         projeto_controller: ProjetoController = ProjetoController(request=request)
-        projeto_id: int = int(request.path_params['projeto_id'])
+        projeto_id: int = int(request.path_params['objeto_id'])
 
         if request.method == 'GET':
             return await super().detail_object(object_controller=projeto_controller, obj_id=projeto_id)

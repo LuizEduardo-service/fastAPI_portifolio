@@ -31,11 +31,11 @@
                     <a href="{{url_for('duvida_list')}}" class="btn btn-info">Voltar</a>
                 </div>
                 <div class="col">
-                    <a href="#" data-url="{{url_for('duvida_delete', duvida_id=objeto.id)}}" data-toggle="modal"
+                    <a href="#" data-url="{{url_for('duvida_delete', objeto_id=objeto.id)}}" data-toggle="modal"
                         data-target="#modal-delete" class="btn btn-danger">Deletar</a>
                 </div>
                 <div class="col">
-                    <a href="{{url_for('duvida_edit', duvida_id=objeto.id)}} " class="btn btn-primary">
+                    <a href="{{url_for('duvida_edit', objeto_id=objeto.id)}} " class="btn btn-primary">
                         Editar
                     </a>
                 </div>

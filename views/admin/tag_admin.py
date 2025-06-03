@@ -28,7 +28,7 @@ class TagAdmin(BaseCrudView):
     
     async def object_delete(self,request: Request):
         tag_controller: TagController = TagController(request=request)
-        tag_id:int = request.path_params['tag_id']
+        tag_id:int = request.path_params['objeto_id']
         return await super().object_delete(object_id= tag_id, object_controller= tag_controller)
     
     async def create_object(self, request:Request):
@@ -61,7 +61,7 @@ class TagAdmin(BaseCrudView):
     
     async def edit_object(self, request: Request):
         tag_controller: TagController = TagController(request=request)
-        tag_id: int = request.path_params['tag_id']
+        tag_id: int = request.path_params['objeto_id']
 
         if request.method == 'GET':
             return await super().detail_object(obj_id=tag_id, object_controller=tag_controller)

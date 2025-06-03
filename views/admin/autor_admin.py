@@ -30,12 +30,12 @@ class AutorAdmin(BaseCrudView):
     
     async def object_delete(self, request: Request):
         autor_controller: AutorController = AutorController(request)
-        autor_id = request.path_params['autor_id']
+        autor_id = request.path_params['objeto_id']
         return await super().object_delete(object_id=autor_id, object_controller=autor_controller)
 
     async def edit_object(self, request:Request):
         autor_controller: AutorController = AutorController(request)
-        autor_id = request.path_params['autor_id']
+        autor_id = request.path_params['objeto_id']
 
 
         autor = await autor_controller.get_one_crud(id_obj=autor_id)

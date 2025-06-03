@@ -30,13 +30,13 @@ class PostAdmin(BaseCrudView):
 
     async def object_delete(self, request: Request):
         post_controller: PostController = PostController(request=request)
-        post_id: int = request.path_params['post_id']
+        post_id: int = request.path_params['objeto_id']
 
         return await super().object_delete(object_id= post_id, object_controller=post_controller)
     
     async def edit_object(self, request: Request):
         post_controller: PostController = PostController(request=request)
-        post_id: int = request.path_params['post_id']
+        post_id: int = request.path_params['objeto_id']
 
         if request.method == 'GET' and 'details' in str(post_controller.request.url):
             return await super().detail_object(obj_id=post_id,object_controller=post_controller)

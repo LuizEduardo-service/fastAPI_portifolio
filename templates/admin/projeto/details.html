@@ -44,13 +44,13 @@
                     </a>
                 </div>
                 <div class="col">
-                    <a href="#" data-url="{{ url_for('projeto_delete', projeto_id=objeto.id) }}" data-toggle="modal"
+                    <a href="#" data-url="{{ url_for('projeto_delete', objeto_id=objeto.id) }}" data-toggle="modal"
                         data-target="#modal-delete" class="btn btn-danger">
                         Deletar
                     </a>
                 </div>
                 <div class="col">
-                    <a href="{{ url_for('projeto_edit', projeto_id=objeto.id) }}" class="btn btn-primary">
+                    <a href="{{ url_for('projeto_edit', objeto_id=objeto.id) }}" class="btn btn-primary">
                         Editar
                     </a>
                 </div>

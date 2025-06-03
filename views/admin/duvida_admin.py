@@ -31,7 +31,7 @@ class DuvidaAdmin(BaseCrudView):
     
     async def object_delete(self, request: Request):
         duvida_controller: DuvidaController = DuvidaController(request)
-        duvida_id = request.path_params['duvida_id']
+        duvida_id = request.path_params['objeto_id']
 
         return await super().object_delete(object_id=duvida_id, object_controller=duvida_controller)
 
@@ -69,7 +69,7 @@ class DuvidaAdmin(BaseCrudView):
 
     async def edit_object(self, request: Request):
         duvida_controller: DuvidaController = DuvidaController(request)
-        duvida_id: int = request.path_params['duvida_id']
+        duvida_id: int = request.path_params['objeto_id']
         duvida = await duvida_controller.get_one_crud(id_obj=duvida_id)
 
         if not duvida:
