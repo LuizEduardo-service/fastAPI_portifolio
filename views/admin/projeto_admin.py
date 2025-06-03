@@ -15,12 +15,6 @@ from controllers.projeto_controller import ProjetoController
 class ProjetoAdmin(BaseCrudView):
     
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/projeto/list', endpoint=self.object_list, methods=['GET'], name='projeto_list' ))
-        self.router.routes.append(Route(path='/projeto/create',endpoint=self.create_object,methods=['GET', 'POST'], name='projeto_create' ))
-        self.router.routes.append(Route(path='/projeto/details/{projeto_id:int}',endpoint=self.edit_object, methods=['GET'], name='projeto_details'))
-        self.router.routes.append(Route(path='/projeto/edit/{projeto_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='projeto_edit'))
-        self.router.routes.append(Route(path='/projeto/delete/{projeto_id:int}',endpoint=self.object_delete, methods=['DELETE'], name='projeto_delete'))
         super().__init__('projeto')
 
     async def object_list(self, request: Request):

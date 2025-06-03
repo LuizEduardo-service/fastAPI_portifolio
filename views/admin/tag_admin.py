@@ -14,12 +14,6 @@ from controllers.tag_controller import TagController
 class TagAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/tag/list',endpoint=self.object_list, methods=['GET'], name='tag_list'))
-        self.router.routes.append(Route(path='/tag/create', endpoint=self.create_object, methods=['GET', 'POST'], name='tag_create'))
-        self.router.routes.append(Route(path='/tag/details/{tag_id:int}', endpoint=self.edit_object, methods=['GET'],name='tag_details'))
-        self.router.routes.append(Route(path='/tag/edit/{tag_id:int}',endpoint=self.edit_object, methods=['GET','POST'], name='tag_edit'))
-        self.router.routes.append(Route(path='/tag/delete/{tag_id:int}',endpoint=self.object_delete, methods=['DELETE'],name='tag_delete'))
         super().__init__('tag')
 
     async def object_list(self, request: Request):

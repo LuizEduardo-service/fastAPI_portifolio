@@ -15,12 +15,6 @@ from views.admin.base_crud_view import BaseCrudView
 class MembroAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/membro/list', endpoint=self.object_list, methods=['GET'], name='membro_list'))
-        self.router.routes.append(Route(path='/membro/create', endpoint=self.create_object, methods=['GET', 'POST'], name='membro_create'))
-        self.router.routes.append(Route(path='/membro/details/{membro_id:int}', endpoint=self.edit_object, methods=['GET'], name='membro_details'))
-        self.router.routes.append(Route(path='/membro/edit/{membro_id:int}', endpoint=self.edit_object, methods=['GET','POST'], name='membro_edit'))
-        self.router.routes.append(Route(path='/membro/delete/{membro_id:int}', endpoint=self.delete_object, methods=['DELETE',], name='membro_delete'))
         super().__init__('membro')
 
     async def object_list(self, request: Request):

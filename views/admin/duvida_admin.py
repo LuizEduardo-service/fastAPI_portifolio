@@ -16,13 +16,6 @@ from fastapi import status
 class DuvidaAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/duvida/list',endpoint=self.object_list, methods=['GET'],name='duvida_list'))
-        self.router.routes.append(Route(path='/duvida/create', endpoint=self.create_object, methods=['GET', 'POST'],name='duvida_create'))
-        self.router.routes.append(Route(path='/duvida/details/{duvida_id:int}', endpoint=self.edit_object, methods=['GET'], name='duvida_details'))
-        self.router.routes.append(Route(path='/duvida/edit/{duvida_id:int}',endpoint=self.edit_object, methods=['GET', 'POST'], name='duvida_edit'))
-        self.router.routes.append(Route(path='/duvida/delete/{duvida_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='duvida_delete'))
-
         super().__init__('duvida')
 
     async def object_list(self, request: Request):

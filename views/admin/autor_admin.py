@@ -16,12 +16,12 @@ from controllers.autor_controller import AutorController
 class AutorAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/autor/list', endpoint=self.object_list,methods=['GET'] ,name='autor_list'))
-        self.router.routes.append(Route(path='/autor/create', endpoint=self.create_object, methods=['GET', 'POST'], name='autor_create'))
-        self.router.routes.append(Route(path='/autor/details/{autor_id:int}', endpoint=self.edit_object, methods=['GET'], name='autor_details'))
-        self.router.routes.append(Route(path='/autor/edit/{autor_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='autor_edit'))
-        self.router.routes.append(Route(path='/autor/delete/{autor_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='autor_delete'))
+        # self.router = APIRouter()
+        # self.router.routes.append(Route(path='/autor/list', endpoint=self.object_list,methods=['GET'] ,name='autor_list'))
+        # self.router.routes.append(Route(path='/autor/create', endpoint=self.create_object, methods=['GET', 'POST'], name='autor_create'))
+        # self.router.routes.append(Route(path='/autor/details/{autor_id:int}', endpoint=self.edit_object, methods=['GET'], name='autor_details'))
+        # self.router.routes.append(Route(path='/autor/edit/{autor_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='autor_edit'))
+        # self.router.routes.append(Route(path='/autor/delete/{autor_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='autor_delete'))
         super().__init__('autor')
 
     async def object_list(self, request: Request):

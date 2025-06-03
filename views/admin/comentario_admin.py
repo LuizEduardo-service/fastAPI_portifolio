@@ -14,12 +14,6 @@ from fastapi.requests import Request
 class ComentarioAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route('/comentario/list',endpoint=self.object_list, methods=['GET'], name='comentario_list'))
-        self.router.routes.append(Route(path='/comentario/create', endpoint=self.create_object, methods=['GET', 'POST'], name='comentario_create'))
-        self.router.routes.append(Route(path='/comentario/details/{comentario_id:int}',endpoint=self.edit_object, methods=['GET'],name='comentario_details'))
-        self.router.routes.append(Route(path='/comentario/edit/{comentario_id:int}', endpoint=self.edit_object,methods=['GET', 'POST'],name='comentario_edit'))
-        self.router.routes.append(Route(path='/comentario/delete/{comentario_id:int}', endpoint=self.object_delete, methods='DELETE',name='comentario_delete'))
         super().__init__('comentario')
 
     async def object_list(self, request: Request):
