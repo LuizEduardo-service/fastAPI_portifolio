@@ -1,5 +1,7 @@
 from datetime import datetime
 from typing import List
+from models.autor_model import AutorModel
+from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi import status
 from fastapi.exceptions import HTTPException
@@ -45,8 +47,8 @@ class PostAdmin(BaseCrudView):
             if not post:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
             
-            autores = await post_controller.get_autores()
-            tags = await post_controller.get_tags()
+            autores = await post_controller.get_objetos(AutorModel)
+            tags = await post_controller.get_objetos(TagModel)
 
             context = {'request': post_controller.request, 'ano': datetime.now().year, 'autores': autores, 'tags': tags, 'objeto': post}
 
@@ -84,8 +86,8 @@ class PostAdmin(BaseCrudView):
         post_controller: PostController = PostController(request=request)
 
         if request.method == 'GET':
-            autores = await post_controller.get_autores()
-            tags = await post_controller.get_tags()
+            autores = await post_controller.get_objetos(AutorModel)
+            tags = await post_controller.get_objetos(TagModel)
             context = {"request": post_controller.request, "ano": datetime.now().year, "autores": autores, "tags": tags}
 
             return settings.TEMPLATES.TemplateResponse(f"admin/post/create.html", context=context)

@@ -1,6 +1,7 @@
 from datetime import datetime
 from controllers.duvida_controller import DuvidaController
 from controllers.area_controller import AreaController
+from models.area_model import AreaModel
 from views.admin.base_crud_view import BaseCrudView
 
 
@@ -38,7 +39,7 @@ class DuvidaAdmin(BaseCrudView):
         duvida_controller: DuvidaController = DuvidaController(request)
 
         if request.method == 'GET':
-            areas = await duvida_controller.get_areas
+            areas = await duvida_controller.get_objetos(AreaModel)
             context = {'request': duvida_controller.request, 'ano': datetime.now().year, "areas": areas}
             return settings.TEMPLATES.TemplateResponse('/admin/duvida/create.html', context=context)
         
@@ -78,7 +79,7 @@ class DuvidaAdmin(BaseCrudView):
             return await super().detail_object(obj_id=duvida_id, object_controller=duvida_controller)
         
         if request.method == 'GET' and 'edit' in str(duvida_controller.request.url):
-            areas = await duvida_controller.get_areas
+            areas = await duvida_controller.get_objetos(AreaModel)
             context = {'request': duvida_controller.request, 'ano': datetime.now().year, 'objeto': duvida, 'areas': areas}
             return settings.TEMPLATES.TemplateResponse(f'admin/duvida/edit.html', context=context)
 

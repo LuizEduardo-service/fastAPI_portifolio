@@ -5,6 +5,7 @@ from fastapi.routing import APIRouter
 from fastapi.requests import Request
 from fastapi.responses import Response, RedirectResponse
 from starlette.routing import Route
+from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi import status
 from fastapi.exceptions import HTTPException
@@ -46,7 +47,7 @@ class AutorAdmin(BaseCrudView):
         
         if request.method == 'GET' and 'edit' in str(autor_controller.request.url):
     
-            tags = await autor_controller.get_tags()
+            tags = await autor_controller.get_objetos(TagModel)
             context = {'request': autor_controller.request, 'ano': datetime.now().year, 'objeto': autor,'tags': tags}
             return settings.TEMPLATES.TemplateResponse('admin/autor/edit.html',context=context)
 
@@ -73,7 +74,7 @@ class AutorAdmin(BaseCrudView):
         autor_controller: AutorController = AutorController(request)
 
         if request.method == 'GET':
-            tags = await autor_controller.get_tags()
+            tags = await autor_controller.get_objetos(TagModel)
             context = {'request': autor_controller.request, 'ano': datetime.now().year, 'tags': tags}
 
             return settings.TEMPLATES.TemplateResponse(f'admin/autor/create.html', context=context)

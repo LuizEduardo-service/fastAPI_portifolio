@@ -1,3 +1,4 @@
+# type: ignore
 from typing import Optional, List
 from fastapi import UploadFile
 from fastapi.requests import Request
@@ -91,3 +92,16 @@ class BaseController:
             autores: Optional[List[AutorModel]] = result.scalars().unique().all()
 
         return autores
+    
+    async def get_objetos(self, model_obj:object) -> Optional[List[object]]:
+        async with get_session() as session:
+            query = select(model_obj)
+            result = await session.execute(query)
+            objetos: Optional[List[model_obj]] = result.scalars().unique().all() 
+
+        return objetos
+    
+    async def get_objeto(self, model_obj: object, id_obj: int) -> Optional[object]:
+        async with get_session() as session:
+            objeto: model_obj = await session.get(model_obj, id_obj)
+            return objeto

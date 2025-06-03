@@ -5,6 +5,7 @@ from typing import List
 from controllers.core.database import get_session
 from models.autor_model import AutorModel
 from controllers.base_controller import BaseController
+from models.tag_model import TagModel
 
 
 class AutorController(BaseController):
@@ -23,7 +24,7 @@ class AutorController(BaseController):
 
 
         for id_tag in tags:
-            tag = await self.get_tag(int(id_tag))
+            tag = await self.get_objeto(TagModel, int(id_tag))
             autor.tags.append(tag)
 
         async with get_session() as session:
@@ -49,7 +50,7 @@ class AutorController(BaseController):
                     await session.commit()
 
                     for id_tag in tags:
-                        tag = await self.get_tag(int(id_tag))
+                        tag = await self.get_objeto(TagModel, int(id_tag))
                         autor.tags.append(tag)
                         # Operação para juntar o objeto tag que vem de outra
                         # sessão com o objeto autor que está nesta sessão.

@@ -1,4 +1,5 @@
 from datetime import datetime
+from models.post_model import PostModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi.routing import APIRouter
 from starlette.routing import Route
@@ -34,7 +35,7 @@ class ComentarioAdmin(BaseCrudView):
         comentario_controller: ComentarioController = ComentarioController(request=request)
 
         if request.method == 'GET':
-            posts = await comentario_controller.get_posts()
+            posts = await comentario_controller.get_objetos(PostModel)
             context ={'request':comentario_controller.request, 'ano': datetime.now().year, 'posts': posts}
             return settings.TEMPLATES.TemplateResponse(f"admin/comentario/create.html", context=context)
 
@@ -47,7 +48,7 @@ class ComentarioAdmin(BaseCrudView):
             id_post: int = form.get('id_post')
             autor: str = form.get('autor')
             texto: str = form.get('texto')
-            posts = await comentario_controller.get_posts()
+            posts = await comentario_controller.get_objetos(PostModel)
             dados = {"id_post": id_post, "autor": autor, "texto": texto}
             context = {
                 "request": request,
@@ -76,7 +77,7 @@ class ComentarioAdmin(BaseCrudView):
             if not comentario:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
             
-            posts = await comentario_controller.get_posts()
+            posts = await comentario_controller.get_objetos(PostModel)
             context = {'request': comentario_controller.request, 'ano': datetime.now().year, 'posts': posts, 'objeto': comentario}
             return settings.TEMPLATES.TemplateResponse('admin/comentario/edit.html', context=context) 
 
