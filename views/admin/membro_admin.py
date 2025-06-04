@@ -43,8 +43,14 @@ class MembroAdmin(BaseCrudView):
                 await membro_controller.post_crud()
             except ValueError as err:
                 nome: str = form.get('nome')
+                senha: str = form.get('senha')
+                email: str = form.get('email')
                 funcao: str = form.get('funcao')
-                dados = {"nome": nome, "funcao": funcao}
+                dados = {"nome": nome,
+                         "funcao": funcao,
+                         "email": email,
+                         "senha": senha
+                         }
                 context = {
                     "request": request,
                     "ano": datetime.now().year,
@@ -76,8 +82,14 @@ class MembroAdmin(BaseCrudView):
 
             except ValueError as err:
                 nome: str = form.get('nome')
+                senha: str = form.get('senha')
+                email: str = form.get('email')
                 funcao: str = form.get('funcao')
-                dados = {"id": membro_id, "nome": nome, "funcao": funcao}
+                dados = {"id": membro_id, 
+                         "nome": nome, 
+                         "senha": senha, 
+                         "email": email, 
+                         "funcao": funcao}
                 context = {
                     "request": request,
                     "ano": datetime.now().year,

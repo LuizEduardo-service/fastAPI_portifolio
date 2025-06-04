@@ -11,7 +11,8 @@ class MemberModel(Base):
     nome: Mapped[str] = mapped_column(String(100))
     funcao: Mapped[str] = mapped_column(String(100))
     imagem: Mapped[str] = mapped_column(String(100))
-
+    email: Mapped[str] = mapped_column(String(400))
+    senha: Mapped[str] = mapped_column(String(400))
 
     @validates('funcao')
     def _valida_funcao(self, key, value):

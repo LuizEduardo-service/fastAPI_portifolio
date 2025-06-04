@@ -17,10 +17,12 @@ class MembroController(BaseController):
         nome: str = form.get('nome')
         funcao: str = form.get('funcao')
         imagem: UploadFile = form.get('imagem')
+        email: str = form.get('email')
+        senha: str = form.get('senha')# TODO: ADICIONAR HASH
 
 
         novo_nome: str = await self._upload_file(imagem=imagem, tipo='membro')
-        membro: MemberModel = MemberModel(nome=nome, funcao=funcao, imagem = novo_nome)
+        membro: MemberModel = MemberModel(nome=nome, funcao=funcao, imagem = novo_nome, email = email, senha= senha)
 
         async with get_session() as session:
             session.add(membro)
@@ -35,11 +37,17 @@ class MembroController(BaseController):
                 nome: str = form.get('nome')
                 funcao: str = form.get('funcao')
                 imagem: UploadFile = form.get('imagem')
+                email: str = form.get('email')
+                senha: str = form.get('senha')
 
                 if membro.nome and membro.nome != nome:
                     membro.nome = nome
                 if membro.funcao and membro.funcao != funcao:
                     membro.funcao = funcao
+                if membro.email and membro.email != email:
+                    membro.email = email
+                if membro.senha and membro.senha != senha:
+                    membro.senha = senha #TODO: ADICIONAR HASH
                 
                 if imagem.filename:
                     novo_nome: str = await self._upload_file(imagem=imagem, tipo='membro')
