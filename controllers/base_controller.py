@@ -1,3 +1,4 @@
+# type: ignore
 from typing import Optional, List
 from fastapi import UploadFile
 from fastapi.requests import Request
@@ -62,32 +63,16 @@ class BaseController:
             return novo_nome
         except Exception as e:
             raise Exception(f'Erro ao salvar imagem: {e}')
-        
-    async def get_tag(self, id_tag: int):
+           
+    async def get_objetos(self, model_obj:object) -> Optional[List[object]]:
         async with get_session() as session:
-            tag: TagModel = await session.get(TagModel, id_tag)
-            return tag
-
-    async def get_tags(self) -> Optional[List[TagModel]]:
-        async with get_session() as session:
-            query = select(TagModel)
+            query = select(model_obj)
             result = await session.execute(query)
-            tags: Optional[List[TagModel]] = result.scalars().all()
+            objetos: Optional[List[model_obj]] = result.scalars().unique().all() 
 
-            return tags
-
-    async def get_posts(self) -> Optional[List[PostModel]]:
-        async with get_session() as session:
-            query = select(PostModel)
-            result = await session.execute(query)
-            autores: Optional[List[PostModel]] = result.scalars().unique().all()
-
-        return autores
+        return objetos
     
-    async def get_autores(self) -> Optional[List[AutorModel]]:
+    async def get_objeto(self, model_obj: object, id_obj: int) -> Optional[object]:
         async with get_session() as session:
-            query = select(AutorModel)
-            result = await session.execute(query)
-            autores: Optional[List[AutorModel]] = result.scalars().unique().all()
-
-        return autores
+            objeto: model_obj = await session.get(model_obj, id_obj)
+            return objeto

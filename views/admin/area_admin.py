@@ -15,12 +15,7 @@ from views.admin.base_crud_view import BaseCrudView
 class AreaAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/area/list', endpoint=self.object_list, methods=['GET'], name='area_list'))
-        self.router.routes.append(Route(path='/area/create', endpoint=self.create_object, methods=['GET', 'POST'], name='area_create'))
-        self.router.routes.append(Route(path='/area/details/{area_id:int}', endpoint=self.edit_object, methods=['GET'], name='area_details'))
-        self.router.routes.append(Route(path='/area/edit/{area_id:int}',endpoint=self.edit_object,methods=['GET', 'POST'], name='area_edit'))
-        self.router.routes.append(Route(path='/area/delete{area_id:int}', endpoint=self.object_delete,methods=['DELETE'],name='area_delete'))
+
         super().__init__('area')
 
     async def object_list(self, request: Request):
@@ -56,7 +51,7 @@ class AreaAdmin(BaseCrudView):
     
     async def edit_object(self, request: Request):
         area_controller: AreaController = AreaController(request=request)
-        area_id = request.path_params['area_id']
+        area_id = request.path_params['objeto_id']
 
         if request.method == 'GET':
             return await super().detail_object(object_controller=area_controller, obj_id=area_id)

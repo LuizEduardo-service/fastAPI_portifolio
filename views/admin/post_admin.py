@@ -1,5 +1,7 @@
 from datetime import datetime
 from typing import List
+from models.autor_model import AutorModel
+from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi import status
 from fastapi.exceptions import HTTPException
@@ -14,12 +16,6 @@ from controllers.core.configs import settings
 class PostAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/post/list', endpoint=self.object_list, methods=['GET'], name='post_list'))
-        self.router.routes.append(Route(path='/post/create', endpoint=self.create_object, methods=['GET', 'POST'], name='post_create'))
-        self.router.routes.append(Route(path='/post/details/{post_id:int}', endpoint=self.edit_object,methods=['GET'], name='post_details'))
-        self.router.routes.append(Route(path='/post/edit/{post_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'],name='post_edit'))
-        self.router.routes.append(Route(path='/post/delete/{post_id:int}',endpoint=self.object_delete, methods=['DELETE'], name='post_delete'))
         super().__init__('post')
 
     async def object_list(self, request: Request):
@@ -28,13 +24,13 @@ class PostAdmin(BaseCrudView):
 
     async def object_delete(self, request: Request):
         post_controller: PostController = PostController(request=request)
-        post_id: int = request.path_params['post_id']
+        post_id: int = request.path_params['objeto_id']
 
         return await super().object_delete(object_id= post_id, object_controller=post_controller)
     
     async def edit_object(self, request: Request):
         post_controller: PostController = PostController(request=request)
-        post_id: int = request.path_params['post_id']
+        post_id: int = request.path_params['objeto_id']
 
         if request.method == 'GET' and 'details' in str(post_controller.request.url):
             return await super().detail_object(obj_id=post_id,object_controller=post_controller)
@@ -45,8 +41,8 @@ class PostAdmin(BaseCrudView):
             if not post:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
             
-            autores = await post_controller.get_autores()
-            tags = await post_controller.get_tags()
+            autores = await post_controller.get_objetos(AutorModel)
+            tags = await post_controller.get_objetos(TagModel)
 
             context = {'request': post_controller.request, 'ano': datetime.now().year, 'autores': autores, 'tags': tags, 'objeto': post}
 
@@ -84,8 +80,8 @@ class PostAdmin(BaseCrudView):
         post_controller: PostController = PostController(request=request)
 
         if request.method == 'GET':
-            autores = await post_controller.get_autores()
-            tags = await post_controller.get_tags()
+            autores = await post_controller.get_objetos(AutorModel)
+            tags = await post_controller.get_objetos(TagModel)
             context = {"request": post_controller.request, "ano": datetime.now().year, "autores": autores, "tags": tags}
 
             return settings.TEMPLATES.TemplateResponse(f"admin/post/create.html", context=context)

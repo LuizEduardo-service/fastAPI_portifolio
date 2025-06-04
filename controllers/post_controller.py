@@ -5,6 +5,7 @@ from fastapi import UploadFile
 from controllers.core.database import get_session
 from models.post_model import PostModel
 from controllers.base_controller import BaseController
+from models.tag_model import TagModel
 
 
 class PostController(BaseController):
@@ -25,7 +26,7 @@ class PostController(BaseController):
         post: PostModel = PostModel(titulo=titulo, imagem=nome_arquivo,text=texto,id_autor=int(autor_id))
 
         for id_tag in tags:
-            tag = await self.get_tag(id_tag=int(id_tag))
+            tag = await self.get_objeto(TagModel, id_obj=int(id_tag))
             post.tags.append(tag)
 
         async with get_session() as session:
@@ -54,7 +55,7 @@ class PostController(BaseController):
                 await session.commit()
 
                 for id_tag in tags:
-                    tag = await self.get_tag(id_tag = int(id_tag))
+                    tag = await self.get_objeto(TagModel, id_obj=int(id_tag))
                     tag_local = await session.merge(tag)
                     post.tags.append(tag_local)
 

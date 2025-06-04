@@ -26,19 +26,19 @@
                     {% for dado in objeto %}
                     <tr>
                         <td class="text-center">
-                            <a href="{{url_for('membro_details', membro_id=dado.id)}}" data-toggle="tooltip"
+                            <a href="{{url_for('membro_details', objeto_id=dado.id)}}" data-toggle="tooltip"
                                 data-placement="top" title="Ver">
                                 <span class="me-1 px-x">
                                     <i class="fa fa-eye"></i>
                                 </span>
                             </a>
-                            <a href="{{url_for('membro_edit', membro_id=dado.id)}}" data-toggle="tooltip"
+                            <a href="{{url_for('membro_edit', objeto_id=dado.id)}}" data-toggle="tooltip"
                                 data-placement="top" title="Editar">
                                 <span class="me-1 px-2">
                                     <i class="fa fa-pen-square"></i>
                                 </span>
                             </a>
-                            <a href="#" data-url="{{url_for('membro_delete', membro_id=dado.id)}}"
+                            <a href="#" data-url="{{url_for('membro_delete', objeto_id=dado.id)}}"
                                 data-target="#modal-delete" data-toggle="modal" title="Deletar">
                                 <span class="me-1 px-2">
                                     <i class="fa fa-trash"></i>

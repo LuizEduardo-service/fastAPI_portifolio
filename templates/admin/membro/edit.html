@@ -7,7 +7,7 @@
     {{error}}
 </div>
 {% endif %}
-<form action="{{url_for('membro_edit', membro_id=objeto.id)}}" method="post" autocomplete="off"
+<form action="{{url_for('membro_edit', objeto_id=objeto.id)}}" method="post" autocomplete="off"
     enctype="multipart/form-data">
     <div class="mb-3">
         <label for="nome" class="form-label">Nome</label>

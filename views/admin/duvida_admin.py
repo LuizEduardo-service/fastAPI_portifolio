@@ -1,6 +1,7 @@
 from datetime import datetime
 from controllers.duvida_controller import DuvidaController
 from controllers.area_controller import AreaController
+from models.area_model import AreaModel
 from views.admin.base_crud_view import BaseCrudView
 
 
@@ -15,13 +16,6 @@ from fastapi import status
 class DuvidaAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/duvida/list',endpoint=self.object_list, methods=['GET'],name='duvida_list'))
-        self.router.routes.append(Route(path='/duvida/create', endpoint=self.create_object, methods=['GET', 'POST'],name='duvida_create'))
-        self.router.routes.append(Route(path='/duvida/details/{duvida_id:int}', endpoint=self.edit_object, methods=['GET'], name='duvida_details'))
-        self.router.routes.append(Route(path='/duvida/edit/{duvida_id:int}',endpoint=self.edit_object, methods=['GET', 'POST'], name='duvida_edit'))
-        self.router.routes.append(Route(path='/duvida/delete/{duvida_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='duvida_delete'))
-
         super().__init__('duvida')
 
     async def object_list(self, request: Request):
@@ -30,7 +24,7 @@ class DuvidaAdmin(BaseCrudView):
     
     async def object_delete(self, request: Request):
         duvida_controller: DuvidaController = DuvidaController(request)
-        duvida_id = request.path_params['duvida_id']
+        duvida_id = request.path_params['objeto_id']
 
         return await super().object_delete(object_id=duvida_id, object_controller=duvida_controller)
 
@@ -38,7 +32,7 @@ class DuvidaAdmin(BaseCrudView):
         duvida_controller: DuvidaController = DuvidaController(request)
 
         if request.method == 'GET':
-            areas = await duvida_controller.get_areas
+            areas = await duvida_controller.get_objetos(AreaModel)
             context = {'request': duvida_controller.request, 'ano': datetime.now().year, "areas": areas}
             return settings.TEMPLATES.TemplateResponse('/admin/duvida/create.html', context=context)
         
@@ -68,7 +62,7 @@ class DuvidaAdmin(BaseCrudView):
 
     async def edit_object(self, request: Request):
         duvida_controller: DuvidaController = DuvidaController(request)
-        duvida_id: int = request.path_params['duvida_id']
+        duvida_id: int = request.path_params['objeto_id']
         duvida = await duvida_controller.get_one_crud(id_obj=duvida_id)
 
         if not duvida:
@@ -78,7 +72,7 @@ class DuvidaAdmin(BaseCrudView):
             return await super().detail_object(obj_id=duvida_id, object_controller=duvida_controller)
         
         if request.method == 'GET' and 'edit' in str(duvida_controller.request.url):
-            areas = await duvida_controller.get_areas
+            areas = await duvida_controller.get_objetos(AreaModel)
             context = {'request': duvida_controller.request, 'ano': datetime.now().year, 'objeto': duvida, 'areas': areas}
             return settings.TEMPLATES.TemplateResponse(f'admin/duvida/edit.html', context=context)
 

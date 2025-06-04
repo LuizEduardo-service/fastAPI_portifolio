@@ -15,12 +15,6 @@ from views.admin.base_crud_view import BaseCrudView
 class MembroAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/membro/list', endpoint=self.object_list, methods=['GET'], name='membro_list'))
-        self.router.routes.append(Route(path='/membro/create', endpoint=self.create_object, methods=['GET', 'POST'], name='membro_create'))
-        self.router.routes.append(Route(path='/membro/details/{membro_id:int}', endpoint=self.edit_object, methods=['GET'], name='membro_details'))
-        self.router.routes.append(Route(path='/membro/edit/{membro_id:int}', endpoint=self.edit_object, methods=['GET','POST'], name='membro_edit'))
-        self.router.routes.append(Route(path='/membro/delete/{membro_id:int}', endpoint=self.delete_object, methods=['DELETE',], name='membro_delete'))
         super().__init__('membro')
 
     async def object_list(self, request: Request):
@@ -29,7 +23,7 @@ class MembroAdmin(BaseCrudView):
     
     async def delete_object(self, request: Request):
         membro_controller: MembroController = MembroController(request)
-        membro_id: int = request.path_params['membro_id']
+        membro_id: int = request.path_params['objeto_id']
         return await super().object_delete(object_id=membro_id, object_controller = membro_controller)
     
     async def create_object(self,request: Request):
@@ -64,7 +58,7 @@ class MembroAdmin(BaseCrudView):
         
     async def edit_object(self, request: Request):
         membro_controller: MembroController = MembroController(request)
-        membro_id = request.path_params['membro_id']
+        membro_id = request.path_params['objeto_id']
 
         if request.method == 'GET':
             return await super().detail_object(object_controller=membro_controller, obj_id= membro_id )

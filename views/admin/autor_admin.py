@@ -5,6 +5,7 @@ from fastapi.routing import APIRouter
 from fastapi.requests import Request
 from fastapi.responses import Response, RedirectResponse
 from starlette.routing import Route
+from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi import status
 from fastapi.exceptions import HTTPException
@@ -15,12 +16,12 @@ from controllers.autor_controller import AutorController
 class AutorAdmin(BaseCrudView):
 
     def __init__(self):
-        self.router = APIRouter()
-        self.router.routes.append(Route(path='/autor/list', endpoint=self.object_list,methods=['GET'] ,name='autor_list'))
-        self.router.routes.append(Route(path='/autor/create', endpoint=self.create_object, methods=['GET', 'POST'], name='autor_create'))
-        self.router.routes.append(Route(path='/autor/details/{autor_id:int}', endpoint=self.edit_object, methods=['GET'], name='autor_details'))
-        self.router.routes.append(Route(path='/autor/edit/{autor_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='autor_edit'))
-        self.router.routes.append(Route(path='/autor/delete/{autor_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='autor_delete'))
+        # self.router = APIRouter()
+        # self.router.routes.append(Route(path='/autor/list', endpoint=self.object_list,methods=['GET'] ,name='autor_list'))
+        # self.router.routes.append(Route(path='/autor/create', endpoint=self.create_object, methods=['GET', 'POST'], name='autor_create'))
+        # self.router.routes.append(Route(path='/autor/details/{autor_id:int}', endpoint=self.edit_object, methods=['GET'], name='autor_details'))
+        # self.router.routes.append(Route(path='/autor/edit/{autor_id:int}', endpoint=self.edit_object, methods=['GET', 'POST'], name='autor_edit'))
+        # self.router.routes.append(Route(path='/autor/delete/{autor_id:int}', endpoint=self.object_delete, methods=['DELETE'], name='autor_delete'))
         super().__init__('autor')
 
     async def object_list(self, request: Request):
@@ -29,12 +30,12 @@ class AutorAdmin(BaseCrudView):
     
     async def object_delete(self, request: Request):
         autor_controller: AutorController = AutorController(request)
-        autor_id = request.path_params['autor_id']
+        autor_id = request.path_params['objeto_id']
         return await super().object_delete(object_id=autor_id, object_controller=autor_controller)
 
     async def edit_object(self, request:Request):
         autor_controller: AutorController = AutorController(request)
-        autor_id = request.path_params['autor_id']
+        autor_id = request.path_params['objeto_id']
 
 
         autor = await autor_controller.get_one_crud(id_obj=autor_id)
@@ -46,7 +47,7 @@ class AutorAdmin(BaseCrudView):
         
         if request.method == 'GET' and 'edit' in str(autor_controller.request.url):
     
-            tags = await autor_controller.get_tags()
+            tags = await autor_controller.get_objetos(TagModel)
             context = {'request': autor_controller.request, 'ano': datetime.now().year, 'objeto': autor,'tags': tags}
             return settings.TEMPLATES.TemplateResponse('admin/autor/edit.html',context=context)
 
@@ -73,7 +74,7 @@ class AutorAdmin(BaseCrudView):
         autor_controller: AutorController = AutorController(request)
 
         if request.method == 'GET':
-            tags = await autor_controller.get_tags()
+            tags = await autor_controller.get_objetos(TagModel)
             context = {'request': autor_controller.request, 'ano': datetime.now().year, 'tags': tags}
 
             return settings.TEMPLATES.TemplateResponse(f'admin/autor/create.html', context=context)
