@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.requests import Request
-
+from fastapi.responses import RedirectResponse, Response
+from fastapi import status
 from controllers.core.configs import settings
 
 router = APIRouter()
@@ -44,3 +45,12 @@ async def portfolio_item(request: Request):
 async def portifolio(request: Request):
     return settings.TEMPLATES.TemplateResponse('home/portfolio.html', context={"request": request})
 
+@router.get('/login', name='get_login')
+async def get_login(request: Request) -> Response:
+    context = {'request': request}
+    return settings.TEMPLATES.TemplateResponse('login.html', context=context)
+
+@router.post('/login', name='post_login')
+async def post_login(request: Request):
+    response = RedirectResponse(request.url_for('admin_index'), status_code=status.HTTP_302_FOUND)
+    return response

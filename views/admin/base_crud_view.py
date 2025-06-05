@@ -1,7 +1,9 @@
 from datetime import datetime
 from fastapi.exceptions import HTTPException
+from fastapi.routing import APIRoute
+from starlette.routing import Route
 from controllers.core.configs import settings
-from fastapi.responses import Response
+from fastapi.responses import RedirectResponse, Response
 from controllers.base_controller import BaseController
 from fastapi import APIRouter, status
 from starlette.routing import Route
@@ -12,11 +14,11 @@ class BaseCrudView:
     def __init__(self, template_base: str) -> None:
         self.template_base = template_base
         self.router = APIRouter()
-        self.router.routes.append(Route(path=f'/{self.template_base}/list', endpoint=self.object_list, methods=['GET'], name=f'{self.template_base}_list'))
-        self.router.routes.append(Route(path=f'/{self.template_base}/create', endpoint=self.create_object, methods=['GET', 'POST'], name=f'{self.template_base}_create'))
-        self.router.routes.append(Route(path=f'/{self.template_base}/details/' +' {objeto_id:int}', endpoint=self.edit_object, methods=['GET'], name=f'{self.template_base}_details'))
-        self.router.routes.append(Route(path=f'/{self.template_base}/edit/' + '{objeto_id:int}',endpoint=self.edit_object,methods=['GET', 'POST'], name=f'{self.template_base}_edit'))
-        self.router.routes.append(Route(path=f'/{self.template_base}/delete/' +' {objeto_id:int}', endpoint=self.object_delete,methods=['DELETE'],name=f'{self.template_base}_delete'))
+        self.router.routes.append(APIRoute(path=f'/{self.template_base}/list', endpoint=self.object_list, methods=['GET'], name=f'{self.template_base}_list'))
+        self.router.routes.append(APIRoute(path=f'/{self.template_base}/create', endpoint=self.create_object, methods=['GET', 'POST'], name=f'{self.template_base}_create'))
+        self.router.routes.append(APIRoute(path=f'/{self.template_base}/details/' +' {objeto_id:int}', endpoint=self.edit_object, methods=['GET'], name=f'{self.template_base}_details'))
+        self.router.routes.append(APIRoute(path=f'/{self.template_base}/edit/' + '{objeto_id:int}',endpoint=self.edit_object,methods=['GET', 'POST'], name=f'{self.template_base}_edit'))
+        self.router.routes.append(Route(path=f'/{self.template_base}/delete/' +' {objeto_id:int}', endpoint=self.object_delete,methods=['POST'],name=f'{self.template_base}_delete'))
 
     async def create_object(self) -> Response:
         """Rota de carregamento de template"""
