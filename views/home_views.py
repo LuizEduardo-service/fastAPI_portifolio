@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from fastapi.requests import Request
 from fastapi.responses import RedirectResponse, Response
 from fastapi import status
+from controllers.core.auth import set_auth
 from controllers.core.configs import settings
 
 router = APIRouter()
@@ -53,4 +54,6 @@ async def get_login(request: Request) -> Response:
 @router.post('/login', name='post_login')
 async def post_login(request: Request):
     response = RedirectResponse(request.url_for('admin_index'), status_code=status.HTTP_302_FOUND)
+
+    set_auth(response=response, membro_id=21)
     return response
