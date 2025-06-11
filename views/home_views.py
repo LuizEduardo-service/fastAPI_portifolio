@@ -4,6 +4,10 @@ from fastapi.responses import RedirectResponse, Response
 from fastapi import status
 from controllers.core.auth import set_auth, unset_auth
 from controllers.core.configs import settings
+from fastapi.exceptions import HTTPException
+
+from controllers.membro_controller import MembroController
+from models.member_model import MemberModel
 
 router = APIRouter()
 
@@ -53,9 +57,20 @@ async def get_login(request: Request) -> Response:
 
 @router.post('/login', name='post_login')
 async def post_login(request: Request):
-    response = RedirectResponse(request.url_for('admin_index'), status_code=status.HTTP_302_FOUND)
+    
+    membro_controller: MembroController = MembroController(request=request)
 
-    set_auth(response=response, membro_id=21)
+    form = await request.form()
+    email: str = form.get('email')
+    senha: str = form.get('senha')
+
+    membro: MemberModel = await membro_controller.login_membro(email=email, senha=senha)
+
+    if not membro:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    response = RedirectResponse(request.url_for('admin_index'), status_code=status.HTTP_302_FOUND)
+    set_auth(response=response, membro_id=membro.id)
     return response
 
 @router.get('/logout', name='logout')

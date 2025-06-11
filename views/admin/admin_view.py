@@ -12,6 +12,9 @@ from views.admin.post_admin import post_admin
 from views.admin.projeto_admin import projeto_admin
 from views.admin.tag_admin import tag_admin
 from controllers.core.auth import get_membro_id
+from controllers.membro_controller import MembroController
+from fastapi.exceptions import HTTPException
+
 
 router = APIRouter(prefix="/admin")
 router.include_router(membro_admin.router)
@@ -30,6 +33,14 @@ async def admin_index(request: Request):
     context = {"request": request, "ano": datetime.now().year}
     
     if membro_id and membro_id > 0: 
+
+        membro_controller: MembroController = MembroController(request=request)
+        membro = await membro_controller.get_one_crud(membro_id)
+
+        if not membro:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+        context.update({'membro': membro})
         return settings.TEMPLATES.TemplateResponse('admin/index.html', context=context)
     
     return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
