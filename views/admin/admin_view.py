@@ -29,7 +29,7 @@ async def admin_index(request: Request):
 
     context = {"request": request, "ano": datetime.now().year}
     
-    if membro_id > 0: 
+    if membro_id and membro_id > 0: 
         return settings.TEMPLATES.TemplateResponse('admin/index.html', context=context)
     
     return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)

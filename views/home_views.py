@@ -58,7 +58,7 @@ async def post_login(request: Request):
     set_auth(response=response, membro_id=21)
     return response
 
-@router.get('/logout', 'logout')
+@router.get('/logout', name='logout')
 async def logout(request: Request):
     response = RedirectResponse(request.url_for('index'), status_code=status.HTTP_302_FOUND)
     unset_auth(response=response)
