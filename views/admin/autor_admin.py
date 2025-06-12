@@ -36,7 +36,7 @@ class AutorAdmin(BaseCrudView):
 
     async def edit_object(self, request:Request):
 
-        context = valida_login(request=request)
+        context = await valida_login(request=request)
 
         if not context.get('membro'):
             return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
@@ -77,7 +77,7 @@ class AutorAdmin(BaseCrudView):
 
     async def create_object(self, request: Request):
 
-        context = valida_login(request=request)
+        context = await valida_login(request=request)
 
         if not context.get('membro'):
             return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)

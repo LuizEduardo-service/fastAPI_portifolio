@@ -10,7 +10,7 @@ from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 
 middlewares = [
-    Middleware(TrustedHostMiddleware, allowed_host=['localhost','fapid.testeapi.com.br']),
+      Middleware(TrustedHostMiddleware, allowed_hosts=['localhost', 'fapid.testeapi.com.br']),
     # Middleware(HTTPSRedirectMiddleware) # usar apenas em produção quando houver um certificado digital
 ]
 

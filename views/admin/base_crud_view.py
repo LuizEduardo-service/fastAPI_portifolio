@@ -32,7 +32,7 @@ class BaseCrudView:
     async def object_list(self, object_controller: BaseController) -> Response:
         """Listar dados do objeto"""
 
-        context = valida_login(request=object_controller.request)
+        context = await valida_login(request=object_controller.request)
 
         if not context.get('membro'):
             return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
@@ -45,7 +45,7 @@ class BaseCrudView:
     async def object_delete(self, object_id: int, object_controller: BaseController) -> Response:
         """remove objeto"""
 
-        context = valida_login(request=object_controller.request)
+        context = await valida_login(request=object_controller.request)
 
         if not context.get('membro'):
             return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
@@ -62,7 +62,7 @@ class BaseCrudView:
     async def detail_object(self, object_controller: BaseController, obj_id: int) -> Response:
         """Consulta um objeto por id"""
 
-        context = valida_login(request=object_controller.request)
+        context = await valida_login(request=object_controller.request)
 
         if not context.get('membro'):
             return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
