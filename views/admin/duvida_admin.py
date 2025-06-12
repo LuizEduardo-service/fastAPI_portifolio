@@ -1,4 +1,5 @@
 from datetime import datetime
+from controllers.core.deps import valida_login
 from controllers.duvida_controller import DuvidaController
 from controllers.area_controller import AreaController
 from models.area_model import AreaModel
@@ -29,6 +30,12 @@ class DuvidaAdmin(BaseCrudView):
         return await super().object_delete(object_id=duvida_id, object_controller=duvida_controller)
 
     async def create_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         duvida_controller: DuvidaController = DuvidaController(request)
 
         if request.method == 'GET':
@@ -50,17 +57,21 @@ class DuvidaAdmin(BaseCrudView):
                 'titulo': titulo,
                 'resposta': resposta
             }
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
             return settings.TEMPLATES.TemplateResponse('admin/duvida/create.html', context=context)
         
         return RedirectResponse(request.url_for('duvida_list'), status_code=status.HTTP_302_FOUND)
 
     async def edit_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         duvida_controller: DuvidaController = DuvidaController(request)
         duvida_id: int = request.path_params['objeto_id']
         duvida = await duvida_controller.get_one_crud(id_obj=duvida_id)
@@ -86,12 +97,10 @@ class DuvidaAdmin(BaseCrudView):
             titulo: str = form.get('titulo')
             resposta: str = form.get('resposta')
             dados = {'id': area_id, 'titulo': titulo, 'resposta': resposta}
-            context = {
-                'request': request,
-                'ano':datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
 
             return settings.TEMPLATES.TemplateResponse('admin/duvida/edit.html', context=context)
         

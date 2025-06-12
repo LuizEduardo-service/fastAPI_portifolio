@@ -1,4 +1,5 @@
 from datetime import datetime
+from controllers.core.deps import valida_login
 from views.admin.base_crud_view import BaseCrudView
 from fastapi.requests import Request
 from fastapi.routing import APIRouter
@@ -28,6 +29,12 @@ class ProjetoAdmin(BaseCrudView):
         return await super().object_delete(object_id=projeto_id, object_controller= projeto_controller)
     
     async def edit_object(self, request: Request):
+        
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         projeto_controller: ProjetoController = ProjetoController(request=request)
         projeto_id: int = int(request.path_params['objeto_id'])
 
@@ -53,12 +60,10 @@ class ProjetoAdmin(BaseCrudView):
                 'descricao_inicial': form.get('descricao_inicial'),
                 'descricao_final': form.get('descricao_final')
             }
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
             return settings.TEMPLATES.TemplateResponse('/admin/projeto/edit.html', context=context)
         
         return RedirectResponse(request.url_for('projeto_list'), status_code=status.HTTP_302_FOUND)

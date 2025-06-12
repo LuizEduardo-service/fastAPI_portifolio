@@ -5,6 +5,7 @@ from fastapi.routing import APIRouter
 from fastapi.requests import Request
 from fastapi.responses import Response, RedirectResponse
 from starlette.routing import Route
+from controllers.core.deps import valida_login
 from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi import status
@@ -34,6 +35,12 @@ class AutorAdmin(BaseCrudView):
         return await super().object_delete(object_id=autor_id, object_controller=autor_controller)
 
     async def edit_object(self, request:Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         autor_controller: AutorController = AutorController(request)
         autor_id = request.path_params['objeto_id']
 
@@ -60,17 +67,21 @@ class AutorAdmin(BaseCrudView):
             nome = form.get('nome')
             tags: List[list] = form.getlist('tags')
             dados = {'nome': nome, 'tags': tags}
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
             return settings.TEMPLATES.TemplateResponse('admin/autor/edit.html', context=context)
         
         return RedirectResponse(request.url_for('autor_list'),status_code=status.HTTP_302_FOUND)
 
     async def create_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         autor_controller: AutorController = AutorController(request)
 
         if request.method == 'GET':
@@ -88,12 +99,10 @@ class AutorAdmin(BaseCrudView):
             nome: str = form.get('nome')
             tags: List[list] = form.get('tag')
             dados = {'nome': nome, 'tags': tags}
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
 
             return settings.TEMPLATES.TemplateResponse('admin/autor/create.html', context=context)
         

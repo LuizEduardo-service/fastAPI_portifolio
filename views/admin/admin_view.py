@@ -27,10 +27,7 @@ router.include_router(tag_admin.router)
 async def admin_index(request: Request):
     context = valida_login(request=request)
 
-    try:
-        if not context['membro']:
-            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
-    except KeyError:
+    if not context.get('membro'):
         return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
 
     return settings.TEMPLATES.TemplateResponse('admin/index.html', context=context)

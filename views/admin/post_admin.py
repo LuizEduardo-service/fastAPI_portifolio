@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List
+from controllers.core.deps import valida_login
 from models.autor_model import AutorModel
 from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
@@ -29,6 +30,12 @@ class PostAdmin(BaseCrudView):
         return await super().object_delete(object_id= post_id, object_controller=post_controller)
     
     async def edit_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         post_controller: PostController = PostController(request=request)
         post_id: int = request.path_params['objeto_id']
 
@@ -65,18 +72,22 @@ class PostAdmin(BaseCrudView):
             texto: str = form.get('texto')
             autor: str = form.get('autor')
             dados = {'id': post_id, 'titulo': titulo, 'tags': tags, 'texto': texto, 'autor':autor}
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
 
             return settings.TEMPLATES.TemplateResponse(f'admin/post/edit.html', context=context)
         
         return RedirectResponse(request.url_for('post_list'), status_code=status.HTTP_302_FOUND)
 
     async def create_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         post_controller: PostController = PostController(request=request)
 
         if request.method == 'GET':
@@ -97,12 +108,10 @@ class PostAdmin(BaseCrudView):
             texto: str = form.get('texto')
             autor: int = form.get('autor')
             dados = {"titulo": titulo, "tags": tags, "texto": texto, "autor": autor}
-            context = {
-                "request": request,
-                "ano": datetime.now().year,
-                "error": err,
-                "objeto": dados
-            }
+            context.update({
+                'error': err,
+                'objeto': dados
+            })
             return settings.TEMPLATES.TemplateResponse("admin/post/create.html", context=context)
         return RedirectResponse(request.url_for('post_list'), status_code=status.HTTP_302_FOUND)
 

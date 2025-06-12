@@ -8,6 +8,7 @@ from fastapi.responses import Response,RedirectResponse
 from fastapi.exceptions import HTTPException
 
 from controllers.core.configs import settings
+from controllers.core.deps import valida_login
 from controllers.membro_controller import MembroController
 from views.admin.base_crud_view import BaseCrudView
 
@@ -28,6 +29,11 @@ class MembroAdmin(BaseCrudView):
     
     async def create_object(self,request: Request):
 
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         membro_controller: MembroController = MembroController(request)
 
         if request.method == 'GET':
@@ -51,18 +57,21 @@ class MembroAdmin(BaseCrudView):
                          "email": email,
                          "senha": senha
                          }
-                context = {
-                    "request": request,
-                    "ano": datetime.now().year,
-                    "error": err,
-                    "objeto": dados
-                }
+                context.update({
+                    'error': err,
+                    'objeto': dados
+                })
 
                 return settings.TEMPLATES.TemplateResponse('admin/membro/create.html', context=context,status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             return RedirectResponse(request.url_for("membro_list"), status_code=status.HTTP_302_FOUND)
         
     async def edit_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
         membro_controller: MembroController = MembroController(request)
         membro_id = request.path_params['objeto_id']
 
@@ -90,12 +99,10 @@ class MembroAdmin(BaseCrudView):
                          "senha": senha, 
                          "email": email, 
                          "funcao": funcao}
-                context = {
-                    "request": request,
-                    "ano": datetime.now().year,
-                    "error": err,
-                    "objeto": dados
-                }
+                context.update({
+                    'error': err,
+                    'objeto': dados
+                })
 
                 return settings.TEMPLATES.TemplateResponse('admin/membro/edit.html', context=context)
             

@@ -1,4 +1,5 @@
 from datetime import datetime
+from controllers.core.deps import valida_login
 from models.tag_model import TagModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi.requests import Request
@@ -26,6 +27,12 @@ class TagAdmin(BaseCrudView):
         return await super().object_delete(object_id= tag_id, object_controller= tag_controller)
     
     async def create_object(self, request:Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         tag_controller:TagController = TagController(request= request)
         form = await request.form()
         dados: set = None
@@ -42,18 +49,22 @@ class TagAdmin(BaseCrudView):
             dados = {
                 'tag': form.get('tag')
             }
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
-                'objeto': dados,
-                'error': err
-            }
+            context.update({
+                'error': err,
+                'objeto': dados
+            })
 
             return settings.TEMPLATES.TemplateResponse('/admin/tag/create.html', context=context)
         
         return RedirectResponse(request.url_for('tag_list'), status_code=status.HTTP_302_FOUND)
     
     async def edit_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         tag_controller: TagController = TagController(request=request)
         tag_id: int = request.path_params['objeto_id']
 
@@ -76,12 +87,10 @@ class TagAdmin(BaseCrudView):
                 'id': tag_id,
                 'tag': form.get()
             }
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
-                'objeto': dados,
-                'eror': err
-            }
+            context.update({
+                'error': err,
+                'objeto': dados
+            })
 
             return settings.TEMPLATES.TemplateResponse('/admin/tag/edit.html', context=context)
         

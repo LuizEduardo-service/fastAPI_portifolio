@@ -1,4 +1,5 @@
 from datetime import datetime
+from controllers.core.deps import valida_login
 from models.post_model import PostModel
 from views.admin.base_crud_view import BaseCrudView
 from fastapi.routing import APIRouter
@@ -26,6 +27,12 @@ class ComentarioAdmin(BaseCrudView):
         return await super().object_delete(object_id=comentario_id, object_controller=comentario_controller)
     
     async def create_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         comentario_controller: ComentarioController = ComentarioController(request=request)
 
         if request.method == 'GET':
@@ -44,21 +51,24 @@ class ComentarioAdmin(BaseCrudView):
             texto: str = form.get('texto')
             posts = await comentario_controller.get_objetos(PostModel)
             dados = {"id_post": id_post, "autor": autor, "texto": texto}
-            context = {
-                "request": request,
-                "ano": datetime.now().year,
-                "error": err,
+            context.update({
+                'error': err,
                 "posts": posts,
-                "objeto": dados
-            }
+                'objeto': dados
+            })
 
             return settings.TEMPLATES.TemplateResponse('admin/comentario/create.html', context=context)
 
 
         return RedirectResponse(request.url_for('comentario_list'),status_code=status.HTTP_302_FOUND)
     
-
     async def edit_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         comentario_controller: ComentarioController = ComentarioController(request=request)
         comentario_id: int = request.path_params['objeto_id']
 
@@ -90,12 +100,10 @@ class ComentarioAdmin(BaseCrudView):
             autor: str = form.get('autor')
             texto: str = form.get('texto')
             dados = {"id": comentario_id, 'post': post, 'autor:': autor, 'texto': texto}
-            context = {
-                'request': request,
-                'ano': datetime.now().year,
+            context.update({
                 'error': err,
                 'objeto': dados
-            }
+            })
 
             return settings.TEMPLATES.TemplateResponse('admin/comentario/edit.html', context=context)
         

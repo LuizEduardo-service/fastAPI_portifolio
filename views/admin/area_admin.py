@@ -10,6 +10,7 @@ from starlette.routing import Route
 from controllers.core.configs import settings
 from controllers.area_controller import AreaController
 from views.admin.base_crud_view import BaseCrudView
+from controllers.core.deps import valida_login
 
 
 class AreaAdmin(BaseCrudView):
@@ -23,6 +24,12 @@ class AreaAdmin(BaseCrudView):
         return await super().object_list(object_controller = area_controller)
     
     async def create_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         area_controller: AreaController = AreaController(request)
 
         if request.method == 'GET':
@@ -38,18 +45,22 @@ class AreaAdmin(BaseCrudView):
             except ValueError as err:
                 area: str = form.get('area')
                 dados = {'area': area}
-                context = {
-                    'request': request,
-                    'ano': datetime.now().year,
+                context.update({
                     'error': err,
                     'objeto': dados
-                }
+                })
 
                 return settings.TEMPLATES.TemplateResponse('admin/area/create.html', context=context, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         return RedirectResponse(request.url_for('area_list'), status_code=status.HTTP_302_FOUND)
     
     async def edit_object(self, request: Request):
+
+        context = valida_login(request=request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         area_controller: AreaController = AreaController(request=request)
         area_id = request.path_params['objeto_id']
 
@@ -70,12 +81,10 @@ class AreaAdmin(BaseCrudView):
             except ValueError as err:
                 area: str = form.get('area')
                 dados = {'area': area}
-                context = {
-                    'request': request,
-                    'ano': datetime.now().year,
+                context.update({
                     'error': err,
                     'objeto': dados
-                }
+                })
 
                 return settings.TEMPLATES.TemplateResponse('admin/area/edit.html', context= context)
             

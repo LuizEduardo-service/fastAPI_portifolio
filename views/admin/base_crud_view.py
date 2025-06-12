@@ -7,6 +7,7 @@ from fastapi.responses import RedirectResponse, Response
 from controllers.base_controller import BaseController
 from fastapi import APIRouter, status
 from starlette.routing import Route
+from controllers.core.deps import valida_login
 
 
 class BaseCrudView:
@@ -31,13 +32,24 @@ class BaseCrudView:
     async def object_list(self, object_controller: BaseController) -> Response:
         """Listar dados do objeto"""
 
+        context = valida_login(request=object_controller.request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         dados = await object_controller.get_all()
-        context = {"request": object_controller.request, "ano": datetime.now().year,"objeto": dados}
+        context.update({"objeto": dados})
 
         return settings.TEMPLATES.TemplateResponse(f'admin/{self.template_base}/list.html', context=context)
     
     async def object_delete(self, object_id: int, object_controller: BaseController) -> Response:
         """remove objeto"""
+
+        context = valida_login(request=object_controller.request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
+        
         obj = await object_controller.get_one_crud(id_obj=object_id)
 
         if not obj:
@@ -49,6 +61,11 @@ class BaseCrudView:
     
     async def detail_object(self, object_controller: BaseController, obj_id: int) -> Response:
         """Consulta um objeto por id"""
+
+        context = valida_login(request=object_controller.request)
+
+        if not context.get('membro'):
+            return settings.TEMPLATES.TemplateResponse('admin/limbo.html', context=context, status_code=status.HTTP_404_NOT_FOUND)
 
         obj = await object_controller.get_one_crud(id_obj=obj_id)
 
