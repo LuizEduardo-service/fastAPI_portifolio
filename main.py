@@ -4,8 +4,17 @@ from fastapi.staticfiles import StaticFiles
 from views import home_views, error_view
 from views.admin import admin_view
 
+from fastapi.middleware import Middleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
-app = FastAPI(redoc_url=None, docs_url=None, exception_handlers=error_view.exception_handlers)
+
+middlewares = [
+    Middleware(TrustedHostMiddleware, allowed_host=['localhost','fapid.testeapi.com.br']),
+    # Middleware(HTTPSRedirectMiddleware) # usar apenas em produção quando houver um certificado digital
+]
+
+app = FastAPI(redoc_url=None, docs_url=None, exception_handlers=error_view.exception_handlers, middleware=middlewares)
 app.include_router(router=home_views.router)
 app.include_router(router=admin_view.router)
 
